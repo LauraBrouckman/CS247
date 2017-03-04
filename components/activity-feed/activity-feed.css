@@ -1,0 +1,71 @@
+.cs142-activity-feed-title {
+	color: #006633;
+	font-family: Circular;
+	font-size: 35px;
+	text-align: center;
+}
+
+.cs142-activity-feed-list {
+	list-style-type: none;'
+	list-style-position: inside;
+	margin: 0;
+	padding: 0;
+}
+
+.cs142-activity-feed-date {
+	color: #000033;
+	font-family: Neutraface;
+	font-size: 12px;
+	margin: 0;
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+
+.cs142-activity-feed-element {
+	font-family: Tahoma;
+	font-size: 17px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #6699FF;
+	margin-bottom: 10px;
+	padding-left: 10px;
+	background-color: #CCFFCC
+}
+.cs142-activity-feed-activity {
+	margin: 0px;
+	padding-bottom: 0px;
+	padding-top: 5px;
+}
+
+.cs142-activity-feed-photo {
+	margin-left: 0;
+	margin-right: 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	width: 100px;
+	height: 100px;
+}
+
+.cs142-activity-feed-button {
+	background-color: #6699FF; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline;
+	font-size: 20px;
+	border-radius: 4px;
+	transition-duration: 0.4s;
+}
+
+.cs142-activity-feed-button:hover {
+	background-color: white;
+	color: #6699FF;
+}
+
+.cs142-activity-feed-center {
+	text-align: center;
+}
+
+

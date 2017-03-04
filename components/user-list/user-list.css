@@ -1,0 +1,22 @@
+.cs142-user-list {
+	text-align: center;
+}
+
+.cs142-user-list-title {
+	color: #006633;
+	font-family: Circular;
+	font-size: 35px;
+	padding-left: 15px;
+}
+
+.cs142-user-list-user {
+	color: #000033;
+	font-family: Neutraface;
+	font-size: 20px;
+	list-style-type: none;'
+	text-decoration: none;
+}
+
+a:hover {
+	color: orange;
+}

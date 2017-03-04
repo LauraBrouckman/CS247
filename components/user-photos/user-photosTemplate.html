@@ -1,0 +1,41 @@
+<!doctype html>
+<html ng-app="cs142App" ng-controller="user-photostController">
+    <head></head>
+
+    <body>
+		<div ng-init="Photos=[]">
+			<h1 class ="cs142-user-photos-title">{{user.first_name}}'s Photos</h1>
+			<ul>
+				<li class = "cs142-user-photos-list" ng-repeat="photo in getPhotos()">
+					<img ng-src = "/images/{{photo.file_name}}" class = "cs142-user-photos-photo"></img>
+					<div class="cs142-user-photos-delete">
+						<p class = "cs142-user-photos-date">Posted: {{format(photo.date_time)}}<p>
+						<button ng-if="onOwnPage" ng-click="deletePhoto(photo)" class="cs142-main-toolbar-button">Delete Photo</button>
+						<button class = "cs142-user-photos-button" ng-click="like(photo)" ng-if="!photo.liked">Like</button>
+						<button class = "cs142-user-photos-button" ng-click="unlike(photo)" ng-if="photo.liked">Unlike</button>
+						<span class = "cs142-user-photos-likes">{{photo.numLikes}} Likes </span>
+					</div>
+					<ul class = "cs142-user-photos-list">
+						<li ng-repeat="comment in getComments(photo)">
+							<div class = "cs142-user-photos-comment">
+								<a class = "cs142-user-photos-nopad" href="#/users/{{comment.user_id}}">{{comment.user.first_name}} {{comment.user.last_name}}:</a>
+								<p class = "cs142-user-photos-nopad"> {{comment.comment}}</p>
+								<p class = "cs142-user-photos-nopad cs142-user-photos-small">Posted: {{format(comment.date_time)}}</p>
+								<button ng-if="ownComment(comment)" ng-click="deleteComment(comment, photo)">Delete Comment</button>
+							</div>
+						</li>
+						<div class = "cs142-photos-addcomment">
+							<form name="commentForm" ng-submit="addComment(comment, photo)">
+								<textarea placeholder="Input comment here" ng-model="comment" name="comment" rows="3" cols="90"></textarea>
+								<br/>
+								<button type="submit">Add Comment</button>
+								<p>{{commentError}}</p>
+							</form>
+						</div>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+    </body>
+</html>

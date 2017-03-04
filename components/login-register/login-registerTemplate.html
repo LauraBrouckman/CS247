@@ -1,0 +1,85 @@
+<!doctype html>
+<html ng-app="cs142App" ng-controller="login-registerController">
+    <head></head>
+    <body>
+		<div id="container2">
+			<div id = "container1">
+				<div id = "col1">
+					<form name="loginForm" ng-submit="login()" class = "cs142-login-col">
+						<p> Login</p>
+						<p class = "red">{{errorMessage}}</p>
+						<md-input-container>
+							<label>Username</label>
+							<input type="text" name="loginName" ng-model="loginName" required ng-minlength="3" ng-maxlength="20"/>
+						</md-input-container>
+						<br/>
+						<md-input-container>
+							<label>Password</label>
+							<input type="password" name="password" ng-model="password" required ng-minlength="3" ng-maxlength="20" />
+						</md-input-container>
+						<br/>
+						<button type="submit" ng-disabled="loginForm.$invalid">Login</button>
+					</form>
+				</div>
+				<div id="col2">
+					<form name="registerForm" ng-submit="register(firstName, lastName, occupation, location, description, registerLoginName, registerPassword, confirmPassword)" class = "cs142-login-col">
+						<p>Not a user yet? Register here!<p>
+						<md-input-container>
+							<label>First Name</label>
+							<input type="text" name="firstName" ng-model="firstName" required />
+						</md-input-container>
+				
+						<md-input-container>
+							<label>Last Name</label>
+							<input type="text" name="lastName" ng-model="lastName" required/>
+						</md-input-container>
+					
+						<br/>
+				
+						<md-input-container>
+							<label>Occupation</label>
+							<input type="text" name="occupation" ng-model="occupation"/>
+						</md-input-container>
+						
+						<md-input-container>
+							<label>Location</label>
+							<input type="text" name="location" ng-model="location"/>
+						</md-input-container>
+				
+						<br/>
+				
+						<md-input-container>
+							<label>Description</label>
+							<input type="text" name="description" ng-model="description"/>
+						</md-input-container>
+					
+						<br/>
+						<br/>
+				
+						<md-input-container>
+							<label>Username</label>
+							<input type="text" name="registerLoginName" ng-model="registerLoginName" required ng-minlength="3" ng-maxlength="20"/>
+						</md-input-container>
+					
+						<br/>
+				
+						<md-input-container>
+							<label>Password</label>
+							<input type="password" name="registerPassword" ng-model="registerPassword" required ng-minlength="3" ng-maxlength="20"/>
+						</md-input-container>
+					
+						<md-input-container>
+							<label>Confirm Password</label>
+							<input type="password" name="confirmPassword" ng-model="confirmPassword" required ng-minlength="3" ng-maxlength="20"/>
+						</md-input-container>	
+				
+						<br/>
+						<p class = "red" ng-if="registerError">{{registerErrorMessage}}</p>						
+						<p ng-if="registerSuccess">You have successfully created an account and can now log in</p>
+						<button type="submit" ng-disabled="registerForm.$invalid">Register me!</button>
+					</form>	
+				</div>
+			</div>
+		</div>	
+    </body>
+</html>

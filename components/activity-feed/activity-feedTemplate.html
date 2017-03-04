@@ -1,0 +1,20 @@
+<!doctype html>
+<html ng-app="cs142App" ng-controller="activity-feedController">
+    <head></head>
+
+    <body>
+		<div>
+			<h1 class = "cs142-activity-feed-title">Activity Feed</h1>
+			<ul class = "cs142-activity-feed-list">
+				<li class = "cs142-activity-feed-element" ng-repeat="activity in getActivities()">
+						<p class = "cs142-activity-feed-activity">{{activity.activityString}}</p>
+						<p class = "cs142-activity-feed-date">{{activity.date}}</p>
+						<img ng-if="activity.photo" class = "cs142-activity-feed-photo" ng-src = "/images/{{activity.photo}}"></img>
+				</li>
+			</ul>
+		</div>
+		<div class = "cs142-activity-feed-center">
+			<button class = "cs142-activity-feed-button" ng-click="refreshActivities()">Refresh Activity Feed</button>
+		</div>
+    </body>
+</html>

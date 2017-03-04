@@ -1,0 +1,57 @@
+Project #8 - Submission form
+
+Please fill in this form and submit it with your project #8.
+
+Enter no more than 5 user stories that you did for the assignment that you would like to be
+graded on. For each story include the following information:
+
+Story number and name: 5 - Activity Feed
+Story points: 4
+Brief description to see the story in action: Open the Menu on the Toolbar and press Activity Feed
+to see the 20 most recent activities of all users in chronological order
+
+
+Story number and name: 1 - Extend User Detail with Usage 
+Story points: 3
+Brief description to see the story in action: Go to any users page to see their most recent and most commented
+photos displayed as thumbnails; click either picture to bring you to the users photos
+
+
+Story number and name: 6 - Deleting User, Photos, comments 
+Story points: 4
+Brief description to see the story in action: A Delete button will appear under any comment/photo added by the 
+current user, press to delete.  To delete the whole user, Menu->Delete Profile, must confirm 
+
+
+Story number and name: 7 - Photo likes votes 
+Story points: 4
+Brief description to see the story in action: A like button appears under every photo, as well as the total number 
+of likes the photo has. Click like to like, button will change to unlike, click there to unlike the photo
+
+Total Story Points: 15
+
+Marketing Video URL (ensure permissions are set to public viewing): https://youtu.be/DeObUqje0Gw
+
+Is it OK with you if we post your Marketing Video URL on the class discussion forum? Yes
+
+Any special instructions for Grading (should be easy to run app from new machine): No
+
+
+************************************ Example *******************
+As an example for if you did only story 5 your file would look like:
+
+Story number and name:  5 - Activity Feed
+Story points:  4
+Brief description to see the story in action:
+Push the button labeled Activity on the toolbar and view the 10 most recent activities of the
+current user.
+
+Total Story Points: 4
+
+Marketing Video URL (ensure permissions are set to public viewing): http://www.youtube.com ---
+
+Is it OK with you if we post your Marketing Video URL on the class discussion forum? Yes
+
+Instructions for Grading (should be easy to run app from new machine): None
+
+

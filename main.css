@@ -1,0 +1,115 @@
+/*
+CSS for the CS142 project #5 main page
+
+Since CSS uses a global name space for classes we should use class names starting with
+cs142-main- here.
+*/
+.cs142-main-toolbar-right {
+	font-family: Neutraface;
+	margin-right: 0px;
+	padding-right: 0px;
+	display: inline-block; 
+	vertical-align: top;
+	position: absolute;
+	top: 20px;
+	left: 700px;
+}
+
+.cs142-main-toolbar-title {
+	font-family: Brush Script MT;
+	font-size: 50px;
+	margin-left: 25px;
+	position: absolute;
+}
+
+.cs142-main-toolbar-photo {
+	font-size: 12px;
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	position: absolute;
+	top: 5px;
+	left: 900px;
+}
+
+.cs142-main-toolbar-photo-a{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.cs142-main-toolbar-photo-b {
+	display: block;
+	position: absolute;
+	top: 20px;
+	left: 0px;
+	margin-top: 5px;
+	width: 90px;
+}
+.cs142-main-toolbar-photo-c {
+	display: block;
+	position: absolute;
+	top: 20px;
+	left: 90px;
+	margin-top: 5px;
+	margin-left: 5px;
+	width: 75px;
+}
+
+.cs142-main-toolbar-button {
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 4px 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline;
+	font-size: 15px;
+	border-radius: 4px;
+	transition-duration: 0.4s;
+}
+
+.cs142-main-toolbar-button:hover {
+	background-color: white;
+	color: #4CAF50;
+}
+
+.cs142-main-menu { 
+	margin-right: 15px;
+	background-color: #4CAF50;
+	position: absolute;
+	top: 10px;
+	left: 1100px;
+}
+
+.cs142-main-menu:hover {
+	background-color: white;
+	
+}
+
+.cs142-main-menu-title {
+	color: white;
+	font-size: 20px;
+	text-align: center;
+}
+
+.cs142-main-menu-title:hover{
+	color: #4CAF50;
+}
+
+.cs142-main-menu-item, .cs142-main-menu-item:visited {
+	text-decoration: none;
+	color: black;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 3px;
+	padding-right: 15px;
+}
+
+.cs142-main-menu-item:hover {
+	background-color: #F0F0F0 ;
+}
+
+
+
