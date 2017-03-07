@@ -4,17 +4,76 @@
 
     <body>
 		<div>
-			<h1 class = "cs142-activity-feed-title">Activity Feed</h1>
 			<ul class = "cs142-activity-feed-list">
-				<li class = "cs142-activity-feed-element" ng-repeat="activity in getActivities()">
-						<p class = "cs142-activity-feed-activity">{{activity.activityString}}</p>
-						<p class = "cs142-activity-feed-date">{{activity.date}}</p>
-						<img ng-if="activity.photo" class = "cs142-activity-feed-photo" ng-src = "/images/{{activity.photo}}"></img>
+				<li class = "cs142-activity-feed-element" ng-repeat="post in getPosts()">
+						<div class="feed-profile-pic-darken" style="opacity:{{post.bias_level/10}}" ng-click="showUserProfile(post.user_id)"></div>
+						<img class = "cs142-activity-feed-profile-pic" ng-src = "/images/{{post.profile_picture}}" ng-click="showUserProfile(post.user_id)"></img>
+						<p class = "cs142-activity-feed-user-name" ng-click="showUserProfile(post.user_id)">{{post.poster}}</p>
+						<p class = "cs142-activity-feed-date">{{post.date}}</p>
+						<div class = "cs142-activity-feed-article">
+							<img class = "cs142-activity-article-photo" ng-src = "/images/{{post.article_picture}}"></img>
+							<p class = "cs142-activity-feed-title">{{post.article_title}}</p>
+							<p class = "cs142-activity-feed-subtitle">{{post.article_subtitle}}</p>
+							<p class = "cs142-activity-feed-source">{{post.article_source}}</p>
+					</div>
+					<hr class="horizontal-line"/>
+					<div class "actions-section">
+						<div class = "action-icon-and-word">
+							<img class = "like-icon" ng-src = "/images/like_icon.png"></img>
+							<p class = "action like"> Like </p>
+						</div>
+						<div class = "action-icon-and-word">
+							<img class = "comment-icon" ng-src = "/images/comment_icon.png"></img>
+							<p class = "action comment"> Comment </p>
+						</div>
+						<div class = "action-icon-and-word">
+							<img class = "share-icon" ng-src = "/images/share_icon.png"></img>
+							<p class = "action share"> Share </p>
+						</div>
+						<div class = "action-icon-and-word" ng-click = "inviteToRead($event, post)">
+							<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.png"></img>
+							<p class = "action invite-to-read"> Invite to Read </p>
+						</div>
+					</div>
 				</li>
 			</ul>
-		</div>
-		<div class = "cs142-activity-feed-center">
-			<button class = "cs142-activity-feed-button" ng-click="refreshActivities()">Refresh Activity Feed</button>
+			<script type="text/ng-template" id="dialog1.tmpl.html"><md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak style="z-index:999">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Invite to Read</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>
+                 Dear {{invitedPost.poster}} <br/>I saw that you read {{invitedPost.article_title}} and I want to invite you to read something new to ~open your mind~.<br/>
+          BOX FOR THEM TO ENTER THE URL GOES HERE!!!
+        </p>
+
+        <p>
+          Thanks!
+        </p>
+        <p>
+  			Anonymous / Name checkboxes go here!
+        </p>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="sendInvitation()">
+        Send
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>
 		</div>
     </body>
 </html>

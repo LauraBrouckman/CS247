@@ -2,7 +2,9 @@
 <html ng-app="cs142App" ng-controller="MainController">
     <head>
 
-        <title>Photo App Version {{main.version || "CS142 Class Project"}}</title>
+        <title>Fakebook</title>
+
+        <link rel="shortcut icon" href="/images/facebook_icon.png" />
 
         <link href="./node_modules/angular-material/angular-material.css" rel="stylesheet" />
     
@@ -35,51 +37,14 @@
 
     <body layout="column">
 
-        <md-toolbar layout = "row">
-			<div class = "cs142-main-toolbar-title"> Instagram 2.0 </div>
-			<div class = "cs142-main-toolbar-right"> {{main.title}}</div>
-			<div class = "cs142-main-toolbar-photo">
-				<input class="cs142-main-toolbar-photo-a" ng-if="main.userLoggedIn" type="file" accept="image/*"  onchange="angular.element(this).scope().inputFileNameChanged(this)">
-				<button class="cs142-main-toolbar-photo-b cs142-main-toolbar-button" ng-if="main.userLoggedIn" ng-click="uploadPhoto()" >Add Photo</button>
-				<div ng-if="photoError" class="cs142-main-toolbar-photo-c">Could not upload photo</div>
-			</div>
-			<md-menu-bar ng-if="main.userLoggedIn" class = "cs142-main-menu">
-				<md-menu aria-label="menu">
-					<button ng-click="$mdOpenMenu()" class = "cs142-main-menu-title">
-						Menu
-					</button>
-					<md-menu-content>
-						
-						<md-menu-item>
-							<a href="#/activities"class = "cs142-main-menu-item">
-								Activity Feed
-							</a>
-						</md-menu-item>
-						<md-menu-divider></md-menu-divider>
-					
-						<md-menu-item>
-							<md-button ng-click="logout()">
-								Logout
-							</md-button>
-						</md-menu-item>
-						<md-menu-divider></md-menu-divider>
-						
-						<md-menu-item>
-							<md-button ng-click="deleteUser()">
-								Delete Profile
-							</md-button>
-						</md-menu-item>
-						<md-menu-divider></md-menu-divider>
-						
-					</md-menu-content>
-				</md-menu>
-			</md-menu-bar>
+        <md-toolbar layout = "row" class='cs142-toolbar'>
+            <div class="main-toolbar-profile-pic-darken" style="opacity:{{main.currentUser.bias_level/10}}" ng-click="showProfile()"></div>
+            <img ng-if = "main.userLoggedIn" class = "cs142-user-bar-profile-pic" ng-click="showProfile()" ng-src = "/images/{{main.currentUser.profile_pic_file}}"></img>
+        	<button ng-if = "main.userLoggedIn" class = "cs142-activity-bar-button" ng-click="showProfile()">{{main.currentUser.first_name}}</button>
+        	<button ng-if = "main.userLoggedIn"  class = "cs142-activity-bar-button" ng-click="showFeed()">Home</button>
 		</md-toolbar>
 
         <div class="container" flex layout="row">
-            <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2" ng-if="main.userLoggedIn">
-                <div ng-include="'components/user-list/user-listTemplate.html'" ng-controller="UserListController"></div>
-            </md-sidenav>
 
             <md-content flex id="content">
                 <div ng-view></div>

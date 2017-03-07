@@ -40,22 +40,53 @@
    // Create init users.
 
    var im = {id: 1, first_name: "Ian", last_name: "Malcolm", 
-             location: "Austin, TX", description: "Should've stayed in the car.", occupation: "Mathematician"};
+             bias_level: 0, profile_pic_file: "malcolm1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var er = {id: 2, first_name: "Ellen", last_name: "Ripley", 
-             location: "Nostromo", description: "Lvl 6 rating. Pilot.", occupation: "Warrant Officer"};
+            bias_level: 4, profile_pic_file: "ripley1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var pt = {id: 3, first_name: "Peregrin", last_name: "Took", 
-             location: "Gondor", description: "Home is behind, the world ahead... " + 
-             "And there are many paths to tread. Through shadow, to the edge of night, " + 
-             "until the stars are all alight... Mist and shadow, cloud and shade, " + 
-             "all shall fade... all... shall... fade... ", occupation: "Thain"};
+             bias_level: 5, profile_pic_file: "took1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var rk = {id: 4, first_name: "Rey", last_name: "Kenobi", 
-             location: "D'Qar", description: "Excited to be here!", occupation: "Rebel"};
+             bias_level: 6, profile_pic_file: "kenobi1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var al = {id: 5, first_name: "April", last_name: "Ludgate", 
-             location: "Pawnee, IN", description: "Witch", occupation: "Animal Control"};
+             bias_level: 2, profile_pic_file: "ludgate1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var jo = {id: 6, first_name: "John", last_name: "Ousterhout",
-             location: "Stanford, CA", description: "<i>CS142!</i>", occupation: "Professor"};
+             bias_level: 9, profile_pic_file: "ouster.jpg", cover_pic_file: "default_cover_pic.jpg"};
 
    var users = [im, er, pt, rk, al, jo];
+
+
+   var post1 = {id: 1, article_pic_file: 'default_article.jpg', date_time: "2017-02-28 10:44:23", user: im, comments: [], likes: [], 
+               article_title: "Article title 1", article_source: "Article Source", article_subtitle: "Article subtitle"};
+   
+   var post2 = {id: 2, article_pic_file: 'default_article.jpg', date_time: "2017-03-1 1:44:23", user: er, comments: [], likes: [], 
+               article_title: "Article title 2", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   
+   var post3 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-3 9:44:23", user: pt, comments: [], likes: [], 
+               article_title: "Article title 3", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post4 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-4 20:44:23", user: pt, comments: [], likes: [], 
+               article_title: "Article title 4", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post5 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-5 12:44:23", user: rk, comments: [], likes: [], 
+               article_title: "Article title 5", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post6 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-6 7:44:23", user: al, comments: [], likes: [], 
+               article_title: "Article title 6", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post7 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-1 2:44:23", user: jo, comments: [], likes: [], 
+               article_title: "Article title 7", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post8 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-2 13:44:23", user: im, comments: [], likes: [], 
+               article_title: "Article title 8", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+   var post9 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-3 12:44:23", user: er, comments: [], likes: [], 
+               article_title: "Article title 9", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   
+   var post10 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-4 1:44:23", user: pt, comments: [], likes: [], 
+               article_title: "Article title 10", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+
+
+   var posts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10];
 
    // Create initial photos.
    var photo1 = {id: 1, date_time: "2012-08-30 10:44:23", file_name: "ouster.jpg", user: jo};
@@ -193,6 +224,12 @@
       return null;
    };
 
+
+   var postListModel = function() {
+      return posts;
+   }
+
+
    var photoOfUserModel = function(userId) {
       return photos.filter(function (photo) {
          return (photo.user.id === userId);
@@ -202,7 +239,8 @@
    var cs142models =  {
       userListModel: userListModel,
       userModel: userModel,
-      photoOfUserModel: photoOfUserModel
+      photoOfUserModel: photoOfUserModel,
+      postListModel: postListModel
    };
 
    if( typeof exports !== 'undefined' ) {

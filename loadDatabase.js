@@ -32,11 +32,12 @@ var User = require('./schema/user.js');
 var Photo = require('./schema/photo.js');
 var SchemaInfo = require('./schema/schemaInfo.js');
 var Activity = require('./schema/activity.js');
+var Post = require('./schema/post.js');
 
 var versionString = '1.0';
 
 // We start by removing anything that existing in the collections.
-var removePromises = [User.remove({}), Photo.remove({}), SchemaInfo.remove({}), Activity.remove({})];
+var removePromises = [User.remove({}), Photo.remove({}), SchemaInfo.remove({}), Activity.remove({}), Post.remove({})];
 
 Promise.all(removePromises).then(function () {
 
@@ -51,11 +52,12 @@ Promise.all(removePromises).then(function () {
         return User.create({
             first_name: user.first_name,
             last_name: user.last_name,
-            location: user.location,
-            description: user.description,
-            occupation: user.occupation,
             login_name: user.last_name.toLowerCase(),
-            password: 'weak'
+            password: 'weak',
+            bias_level: user.bias_level,
+            profile_pic_file: user.profile_pic_file,
+            cover_pic_file: user.cover_pic_file
+
         }, function (err, userObj) {
             if (err) {
                 console.error('Error create user', err);
@@ -77,44 +79,31 @@ Promise.all(removePromises).then(function () {
     var allPromises = Promise.all(userPromises).then(function () {
         // Once we've loaded all the users into the User collection we add all the photos. Note
         // that the user_id of the photo is the MongoDB assigned id in the User object.
-        var photoModels = [];
-        for (var i = 0; i < userIDs.length; i++) {
-            photoModels = photoModels.concat(cs142models.photoOfUserModel(userIDs[i]));
-        }
-        var photoPromises = photoModels.map(function (photo) {
-            return Photo.create({
-                file_name: photo.file_name,
-                date_time: photo.date_time,
-                user_id: photo.user.objectID
-            }, function (err, photoObj) {
-                if (err) {
-                    console.error('Error create user', err);
-                } else {
-                    // Set the unique ID of the object. We use the MongoDB generated _id for now
-                    // but we keep it distinct from the MongoDB ID so we can go to something
-                    // prettier in the future since these show up in URLs, etc.
-                    photoObj.id = photoObj._id;
-                    photoObj.save();
 
-                    photo.objectID = photoObj._id;
-                    if (photo.comments) {
-                        photo.comments.forEach(function (comment) {
-                            photoObj.comments.push({
-                                comment: comment.comment,
-                                date_time: comment.date_time,
-                                user_id: comment.user.objectID
-                            });
-                            console.log("Adding comment of length %d by user %s to photo %s",
-                                comment.comment.length,
-                                comment.user.objectID,
-                                photo.file_name);
-                        });
-                    }
-                    console.log('Adding photo:', photo.file_name, ' of user ID ', photo.user.objectID);
+
+
+        var postModels = cs142models.postListModel();
+        var postPromises = postModels.map(function (post) {
+            return Post.create({
+                article_pic_file: post.article_pic_file,
+                date_time: post.date_time, //  The date and time when the photo was added to the database
+                user_id: post.user.objectID, // The user object of the user who created the post.
+                article_title: post.article_title,
+                article_source: post.article_source,
+                article_subtitle: post.article_subtitle,
+                profile_pic_file: post.user.profile_pic_file,
+                bias_level: post.user.bias_level
+            }, function (err, postObj) {
+                if(err) {
+                    console.error('Error create post', err);
+                } else {
+                    postObj.id = postObj._id;
+                    postObj.save();
                 }
             });
         });
-        return Promise.all(photoPromises).then(function () {
+       
+        return Promise.all(postPromises).then(function () {
             // Create the SchemaInfo object
             return SchemaInfo.create({
                 version: versionString

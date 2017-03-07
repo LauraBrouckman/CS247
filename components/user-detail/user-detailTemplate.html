@@ -3,32 +3,12 @@
     <head></head>
     <body>
 		<div class = "cs142-user-detail">
-			<h1 class = "cs142-user-detail-name">{{user.first_name}} {{user.last_name}} </h1>
-			<h2 class = "cs142-user-detail-info">{{user.occupation}} in {{user.location}}</h2>
-			<p class = "cs142-user-detail-description">"{{user.description}}"<p>
-			<a class = "cs142-user-detail-description" href = "#/photos/{{user.id}}">{{user.first_name}}'s Photos</a>
-			<div class = "cs142-user-detail-thumbnail">
-				<div class = "cs142-user-detail-thumbnail-a">
-					<p> Most recent photo</p>
-					<div  ng-if="mostRecentExists()">
-						<a href = "#/photos/{{user.id}}">
-							<img ng-src = "/images/{{mostRecent.file_name}}" class = "cs142-user-detail-photo"/>
-						</a>
-						<p>Posted: {{mostRecentDate}}</p>
-					</div>
-					<p ng-if="!mostRecentExists()"> {{user.first_name}} does not have any photos</p>
-				</div>
-
-				<div class = "cs142-user-detail-thumbnail-b">
-					<p> Most commented photo </p>
-					<div  ng-if="mostCommentsExists()">
-						<a href = "#/photos/{{user.id}}">
-							<img ng-src = "/images/{{mostComments.file_name}}" class = "cs142-user-detail-photo"/>
-						</a>
-						<p>Comments: {{mostComments.comments.length}}</p>
-					</div>
-					<p ng-if="!mostCommentsExists()"> {{user.first_name}} does not have any photots</p>
-				</div>
+			<div class="profile-container">
+				<h1 class = "cs142-user-detail-name">{{user.first_name}} {{user.last_name}} </h1>
+				<div class = "profile-pic-darken" style = "opacity:{{user.bias_level/10}}"> </div>
+				<img class = "cs142-user-detail-profile-pic" ng-src = "/images/{{user.profile_pic_file}}"></img>
+				<div class="cover-pic-darken" style = "opacity:{{user.bias_level/10}}"> </div>
+				<img class = "cs142-user-detail-cover-pic" ng-src = "/images/{{user.cover_pic_file}}"></img>
 			</div>
 		</div>
 

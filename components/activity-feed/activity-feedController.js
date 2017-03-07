@@ -1,9 +1,9 @@
 'use strict';
 
 
-cs142App.controller('ActivityFeedController', ['$scope', '$route',
- function ($scope, $route) {
-	$scope.activities = [];
+cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', '$mdDialog', 
+ function ($scope, $route, $location, $mdDialog) {
+	$scope.posts = [];
 	var userName = function(userId) {
 		for(var i in $scope.main.users) {
 			if(userId === $scope.main.users[i].id) {
@@ -12,6 +12,13 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route',
 		}
 		return "";
 	};
+
+	$scope.FetchModel('http://localhost:3000/user/list', function(model) {
+		$scope.$apply(function() {
+			$scope.main.users = model;
+		});
+	});
+
 	$scope.FetchModel('http://localhost:3000/activities', function(model) {
 		$scope.$apply(function() {
 			model.sort(function(a, b) {
@@ -22,17 +29,18 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route',
 			for(var i = 0; i < 20; i++) {
 				if(model[i]) {
 					var obj = {};
-					if(model[i].activity_name === "Logged in" || model[i].activity_name === "Logged out" || model[i].activity_name ===  "Registered") {
-						obj.activityString = userName(model[i].user_id) + " " + model[i].activity_name;
-					} else if(model[i].activity_name === "Commented") {
-						obj.activityString = userName(model[i].user_id) + " commented: " + model[i].comment; 
-						obj.photo = model[i].photo_filename;
-					} else if(model[i].activity_name === "Photo") {
-						obj.activityString = userName(model[i].user_id) + " added a photo at" 
-						obj.photo = model[i].photo_filename;
-					}
-					obj.date = format(model[i].date_time);
-					$scope.activities.push(obj);
+					obj.profile_picture = model[i].profile_pic_file;
+					obj.poster = userName(model[i].user_id);
+					obj.user_id = model[i].user_id;
+					var oldDate = new Date(model[i].date_time);
+					var newDate = new Date();
+					obj.date = format(newDate, oldDate) 
+					obj.article_title = model[i].article_title;
+					obj.article_subtitle = model[i].article_subtitle;
+					obj.article_source = model[i].article_source;
+					obj.article_picture = model[i].article_pic_file;
+					obj.bias_level = model[i].bias_level;
+					$scope.posts.push(obj);
 				}
 				else {
 					break;
@@ -40,37 +48,71 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route',
 			}
 		});
 	});
+
+	$scope.showUserProfile = function(user_id) {
+		$location.path('/users/' + user_id);
+	}
 	
-	$scope.getActivities = function() {
-		return $scope.activities;
+	$scope.getPosts = function() {
+		return $scope.posts;
 	};
 	
-	$scope.refreshActivities = function() {
+	$scope.refreshPosts = function() {
 		$route.reload();
 	};
 	
-	var format = function(date) {
-		var dateObj = new Date(date);
-		return dayOfWeek(dateObj.getDay()) + month(dateObj.getMonth()) + dateObj.getDate() + ", " + dateObj.getFullYear() + getTime(dateObj);
+	var format = function(newDate, oldDate) {
+		var minutesAgo = (newDate - oldDate)/60000
+		if (minutesAgo >= 60) {
+			var hoursAgo = minutesAgo / 60;
+		} else {
+			return parseInt(minutesAgo) + " minutes ago";
+		}
+		if (hoursAgo >= 24) {
+			var daysAgo = hoursAgo / 24;
+		}  else {
+			return parseInt(hoursAgo) + " hours ago";
+		} 
+		if (daysAgo >= 7) {
+			var weeksAgo = daysAgo / 7;
+		} else {
+			return parseInt(daysAgo) + " days ago";
+		}
+		return parseInt(weeksAgo) + " weeks ago";
+		
 	};
-	function dayOfWeek(i) {
-		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-		return days[i] + ", ";
-	}
 
-	function month(i) {
-		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		return months[i] + " ";
-	}
+	var invitedPost = {}
 
-	function getTime(date) {
-		var timeString = date.toLocaleTimeString();
-		var time = timeString.split(":");
-		var ampm = timeString.split(" ");
-		if (time[0].length == 1)
-			time[0] = "0" + time[0];
-		return " " + time[0] + ":" + time[1] + " " + ampm[1];
-	}
+	$scope.inviteToRead = function(ev, post) {
+		invitedPost = post;
+	    $mdDialog.show({
+	      controller: DialogController,
+	      templateUrl: 'dialog1.tmpl.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      clickOutsideToClose:true,
+	      fullscreen: false // Only for -xs, -sm breakpoints.
+	    });
+  	};
+
+  function DialogController($scope, $mdDialog) {
+  	$scope.invitedPost = invitedPost;
+  	console.log($scope.invitedPost);
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+
+    $scope.sendInvitation = function() {
+    	//CODE TO SEND INVITATION TO CHALLENGE GOES HERE!!!
+      $mdDialog.hide();
+    };
+  }
 		
 }]);
+
 

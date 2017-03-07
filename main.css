@@ -15,6 +15,29 @@ cs142-main- here.
 	left: 700px;
 }
 
+.cs142-user-bar-profile-pic {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	content: '';
+	height: 30px;
+	width: 30px;
+	position: relative;
+	top: 6px;
+	right: -83%;
+	cursor: pointer;
+}
+
+.main-toolbar-profile-pic-darken {
+	height: 28px;
+	width: 28px;
+	position: relative;
+	background-color: black;
+	top: 7px;
+	right: -85%;
+	cursor: pointer;
+	z-index: 100;
+}
+
 .cs142-main-toolbar-title {
 	font-family: Brush Script MT;
 	font-size: 50px;

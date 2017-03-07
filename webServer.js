@@ -44,6 +44,7 @@ var User = require('./schema/user.js');
 var Photo = require('./schema/photo.js');
 var Activity = require('./schema/activity.js');
 var SchemaInfo = require('./schema/schemaInfo.js');
+var Post = require('./schema/post.js');
 
 var express = require('express');
 var app = express();
@@ -157,7 +158,7 @@ app.get('/user/:id', function (request, response) {
 		return;
 	}
 	var id = request.params.id;
-    User.findOne({_id: id}).select('id first_name last_name occupation location description').exec(function(err, user){
+    User.findOne({_id: id}).select('id first_name last_name bias_level profile_pic_file cover_pic_file').exec(function(err, user){
 		if(err) {
 			response.status(400).send(err.message);
 		}
@@ -244,55 +245,55 @@ app.get('/admin/logout', function(request, response) {
 	});
 });
 
-app.post('/commentsOfPhoto/:photo_id', function(request, response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to comment without logging in");
-		return;
-	}
-	var photoId = request.params.photo_id;
-	var comment = request.body.comment;
-	if(!comment) {
-		response.status(400).send("comment is empty");
-		return;
-	}
-	Photo.findOne({_id: photoId}, function(err, photo) {
-		if(err) {
-			response.status(400).send(err.message);
-			return;
-		}
-		var newComment = {};
-		newComment.comment = comment;
-		newComment.date_time = Date.now();
-		newComment.user_id = request.session.user_id;
-		photo.comments.push(newComment);
-		photo.save(function(err) {
-			if(err) {
-				console.log(err);
-				response.status(400).send();
-				return;
-			}
-			response.end(JSON.stringify(photo));
-		});
-	});
-});
+// app.post('/commentsOfPhoto/:photo_id', function(request, response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to comment without logging in");
+// 		return;
+// 	}
+// 	var photoId = request.params.photo_id;
+// 	var comment = request.body.comment;
+// 	if(!comment) {
+// 		response.status(400).send("comment is empty");
+// 		return;
+// 	}
+// 	Photo.findOne({_id: photoId}, function(err, photo) {
+// 		if(err) {
+// 			response.status(400).send(err.message);
+// 			return;
+// 		}
+// 		var newComment = {};
+// 		newComment.comment = comment;
+// 		newComment.date_time = Date.now();
+// 		newComment.user_id = request.session.user_id;
+// 		photo.comments.push(newComment);
+// 		photo.save(function(err) {
+// 			if(err) {
+// 				console.log(err);
+// 				response.status(400).send();
+// 				return;
+// 			}
+// 			response.end(JSON.stringify(photo));
+// 		});
+// 	});
+// });
 
 app.post('/user', function(request,response) {
 	var login_name = request.body.login_name;
 	var password = request.body.password;
 	var first_name = request.body.first_name;
 	var last_name = request.body.last_name;
-	var location = request.body.location;
-	var description = request.body.description;
-	var occupation = request.body.occupation;
+	console.log(last_name);
+	console.log(first_name);
+	console.log(login_name);
 	if(!login_name || !first_name || !last_name) {
 		response.status(400).send("Necessary field empty");
 		return;
 	}
-	User.create({first_name: first_name, last_name: last_name, login_name: login_name, password: password, location: location, description: description,
-		occupation: occupation}, doneCallback);
+	User.create({first_name: first_name, last_name: last_name, login_name: login_name, password: password, bias_level: 0, profile_pic_file: "", cover_pic_file: ""}, doneCallback);
 
 	function doneCallback(err, newUser) {
 		if(err) {
+			console.log("HERE");
 			response.status(400).send(err);
 			return;
 		}
@@ -304,131 +305,131 @@ app.post('/user', function(request,response) {
 });
 
 
-app.post('/photos/new', function(request, response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to add photo without logging in");
-		return;
-	}
-	processFormBody(request, response, function (err) {
-		if (err || !request.file) {
-            response.status(400).send("Could not process request");
-            return;
-        }
-        var timestamp = new Date().valueOf();
-        var filename = 'U' +  String(timestamp) + request.file.originalname;
-        fs.writeFile("./images/" + filename, request.file.buffer, function (err) {
-			Photo.create({file_name: filename, date_time: Date.now(), user_id: request.session.user_id, comments: []}, function(err, newPhoto) {
-				if(err) {
-					response.status(400).send(err);
-					return;
-				}
-				newPhoto.id = newPhoto._id;
-				newPhoto.save();
-				response.end(JSON.stringify(newPhoto));
-			});
-        });
-    });
-});
+// app.post('/photos/new', function(request, response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to add photo without logging in");
+// 		return;
+// 	}
+// 	processFormBody(request, response, function (err) {
+// 		if (err || !request.file) {
+//             response.status(400).send("Could not process request");
+//             return;
+//         }
+//         var timestamp = new Date().valueOf();
+//         var filename = 'U' +  String(timestamp) + request.file.originalname;
+//         fs.writeFile("./images/" + filename, request.file.buffer, function (err) {
+// 			Photo.create({file_name: filename, date_time: Date.now(), user_id: request.session.user_id, comments: []}, function(err, newPhoto) {
+// 				if(err) {
+// 					response.status(400).send(err);
+// 					return;
+// 				}
+// 				newPhoto.id = newPhoto._id;
+// 				newPhoto.save();
+// 				response.end(JSON.stringify(newPhoto));
+// 			});
+//         });
+//     });
+// });
 
-app.delete('/deletePhoto/:photo_id', function(request,response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to delete photo without logging in");
-		return;
-	}
-	var photoId = request.params.photo_id;
-	Photo.remove({id: photoId}, function (err) { 
-		if(err) {
-			response.status(400).send("Could not delete photo");
-			return;
-		}
-		response.end("Photo deleted");
-	});
-});
+// app.delete('/deletePhoto/:photo_id', function(request,response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to delete photo without logging in");
+// 		return;
+// 	}
+// 	var photoId = request.params.photo_id;
+// 	Photo.remove({id: photoId}, function (err) { 
+// 		if(err) {
+// 			response.status(400).send("Could not delete photo");
+// 			return;
+// 		}
+// 		response.end("Photo deleted");
+// 	});
+// });
 
-app.post('/deleteComment/:photo_id', function(request,response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to delete comment without logging in");
-		return;
-	}
-	var photoId = request.params.photo_id;
-	var commentToDelete = request.body.comment;
-	Photo.findOne({_id: photoId}, function(err, photo) {
-		if(err) {
-			response.status(400).send(err.message);
-			return;
-		}
-		for (var c in photo.comments) {
-			if(photo.comments[c]._id == commentToDelete._id) {
-				photo.comments.splice(c, 1);
-			}
-		}
-		photo.save(function(err) {
-			if(err) {
-				console.log(err);
-				response.status(400).send();
-				return;
-			}
-			response.end(JSON.stringify(photo));
-		});
-	});
-});
+// app.post('/deleteComment/:photo_id', function(request,response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to delete comment without logging in");
+// 		return;
+// 	}
+// 	var photoId = request.params.photo_id;
+// 	var commentToDelete = request.body.comment;
+// 	Photo.findOne({_id: photoId}, function(err, photo) {
+// 		if(err) {
+// 			response.status(400).send(err.message);
+// 			return;
+// 		}
+// 		for (var c in photo.comments) {
+// 			if(photo.comments[c]._id == commentToDelete._id) {
+// 				photo.comments.splice(c, 1);
+// 			}
+// 		}
+// 		photo.save(function(err) {
+// 			if(err) {
+// 				console.log(err);
+// 				response.status(400).send();
+// 				return;
+// 			}
+// 			response.end(JSON.stringify(photo));
+// 		});
+// 	});
+// });
 
-app.delete('/deleteUser/:user_id', function(request,response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to delete user without logging in");
-		return;
-	}
-	var userId = request.params.user_id;
-	//delete actual user
-	User.remove({id: userId}, function (err) { 
-		if(err) {
-			response.status(400).send("Could not delete user");
-			return;
-		}
-		//delete all of their activities
-		Activity.remove({user_id: userId}, function(err, activities) {
-			if(err) {
-				response.status(400).send("Could not delete user");
-				return;
-			}
-			//delete all of their photos
-			Photo.remove({user_id: userId}, function(err, photos){
-				if(err) {
-					response.status(400).send(err.message);
-					return;
-				}
-				//delete all of their comments and likes
-				Photo.find({}, function(err, photos) {
-					if(err) {
-						response.status(400).send(err.message);
-						return;
-					}
-					async.each(photos, function(photo, callback) {
-						for (var c in photo.comments) {
-							if(photo.comments[c].user_id == userId) {
-								photo.comments.splice(c,1);
-								photo.save();
-							}
-						}
-						for (var x in photo.likes) {
-							if(photo.likes[x] == userId) {
-								photo.likes.splice(x, 1);
-								photo.save();
-							}
-						}
-						callback();
-					}, function(err) {
-						if(err) {
-							response.status(400).send(err);
-							return;
-						}
-						response.end("user deleted");
-					});
-				});
-			});
-		});
-	});
-});
+// app.delete('/deleteUser/:user_id', function(request,response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to delete user without logging in");
+// 		return;
+// 	}
+// 	var userId = request.params.user_id;
+// 	//delete actual user
+// 	User.remove({id: userId}, function (err) { 
+// 		if(err) {
+// 			response.status(400).send("Could not delete user");
+// 			return;
+// 		}
+// 		//delete all of their activities
+// 		Activity.remove({user_id: userId}, function(err, activities) {
+// 			if(err) {
+// 				response.status(400).send("Could not delete user");
+// 				return;
+// 			}
+// 			//delete all of their photos
+// 			Photo.remove({user_id: userId}, function(err, photos){
+// 				if(err) {
+// 					response.status(400).send(err.message);
+// 					return;
+// 				}
+// 				//delete all of their comments and likes
+// 				Photo.find({}, function(err, photos) {
+// 					if(err) {
+// 						response.status(400).send(err.message);
+// 						return;
+// 					}
+// 					async.each(photos, function(photo, callback) {
+// 						for (var c in photo.comments) {
+// 							if(photo.comments[c].user_id == userId) {
+// 								photo.comments.splice(c,1);
+// 								photo.save();
+// 							}
+// 						}
+// 						for (var x in photo.likes) {
+// 							if(photo.likes[x] == userId) {
+// 								photo.likes.splice(x, 1);
+// 								photo.save();
+// 							}
+// 						}
+// 						callback();
+// 					}, function(err) {
+// 						if(err) {
+// 							response.status(400).send(err);
+// 							return;
+// 						}
+// 						response.end("user deleted");
+// 					});
+// 				});
+// 			});
+// 		});
+// 	});
+// });
 
 
 app.get('/activities', function(request, response) {
@@ -436,7 +437,7 @@ app.get('/activities', function(request, response) {
 		response.status(400).send("Tried to view activity feed");
 		return;
 	}
-	Activity.find({}, function(err, activities) {
+	Post.find({}, function(err, activities) {
 		if(err) {
 			response.status(400).send("Could not retrieve activities");
 			return;
@@ -446,103 +447,103 @@ app.get('/activities', function(request, response) {
 });
 
 app.post('/add/activity', function(request, response) {
-	if(!request.session.login_name && !(request.body.activity_name === "Registered" || request.body.activity_name === "Logged out")) {
+
+	if(!request.session.login_name) {
 		response.status(400).send("Tried to add activity without logging in");
 		return;
 	}
-	var activity = {};
-	activity.user_id = request.body.user_id;
-	User.findOne({id: activity.user_id}, function(err, user) {
+	var post = {};
+	post.user_id = request.body.user_id;
+	User.findOne({id: post.user_id}, function(err, user) {
 		if(err || !user) {
-			response.status(400).send("user does not exist");
+			response.status(400).send("user does not exist")
 			return;
 		}
-		activity.activity_name = request.body.activity_name;
-		if(request.body.comment) {
-			activity.comment = request.body.comment;
-		} 
-		if(request.body.photo_filename) {
-			activity.photo_filename = request.body.photo_filename;
-		}
-		activity.date_time = Date.now();
-		Activity.create(activity, function(err, newActivity) {
+		post.article_pic_file = request.body.article_pic_file;
+		post.date_time = Date.now()
+		post.article_subtitle = request.body.article_subtitle;
+		post.article_title = request.body.article_title;
+		post.article_source = request.body.article_source;
+		post.comments = []
+		post.likes = []
+		Post.create(post, function(err, newPost) {
 			if(err) {
 				console.log(err);
 				response.status(400).send(err);
 				return;
 			}
-			response.end(JSON.stringify(newActivity));
-		});
-	});
+			response.end(JSON.stringify(newPost));
+		})
+	})
 });
 
-app.post('/like/:user_id', function(request, response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to view activity feed");
-		return;
-	}
-	var userId = request.params.user_id;
-	var photoId = request.body.photo_id;
-	Photo.findOne({id: photoId}, function(err, photo) {
-		if(err) {
-			response.status(400).send(err);
-			return;
-		}
-		for(var x in photo.likes) {
-			if(photo.likes[x] == userId) { //tried to like a photo they already liked
-				console.log("Tried to like photo already liked");
-				response.status(400).send("Tried to like photo already liked");
-				return;
-			}
-		}
-		photo.likes.push(userId);
-		photo.save(function(err) {
-			if(err) {
-				response.status(400).send("couldn't save photo");
-				return;
-			}
-			response.end(JSON.stringify(photo));
-		});
-	});
-});
+// app.post('/like/:user_id', function(request, response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to view activity feed");
+// 		return;
+// 	}
+// 	var userId = request.params.user_id;
+// 	var photoId = request.body.photo_id;
+// 	Photo.findOne({id: photoId}, function(err, photo) {
+// 		if(err) {
+// 			response.status(400).send(err);
+// 			return;
+// 		}
+// 		for(var x in photo.likes) {
+// 			if(photo.likes[x] == userId) { //tried to like a photo they already liked
+// 				console.log("Tried to like photo already liked");
+// 				response.status(400).send("Tried to like photo already liked");
+// 				return;
+// 			}
+// 		}
+// 		photo.likes.push(userId);
+// 		photo.save(function(err) {
+// 			if(err) {
+// 				response.status(400).send("couldn't save photo");
+// 				return;
+// 			}
+// 			response.end(JSON.stringify(photo));
+// 		});
+// 	});
+// });
 
-app.post('/unlike/:user_id', function(request, response) {
-	if(!request.session.login_name) {
-		response.status(400).send("Tried to view activity feed");
-		return;
-	}
-	var userId = request.params.user_id;
-	var photoId = request.body.photo_id;
-	Photo.findOne({id: photoId}, function(err, photo) {
-		if(err) {
-			console.log("Could not find photo");
-			response.status(400).send(err);
-			return;
-		}
-		var toDeleteIndex;
-		var notLikedYet = true;
-		for(var x in photo.likes) {
-			if(photo.likes[x] == userId) { 
-				notLikedYet = false;
-				toDeleteIndex = x;
-				break;
-			}
-		}
-		if(notLikedYet) {
-			console.log("Tried to like photo not already liked");
-			response.status(400).send("Tried to unlike photo not already liked");
-			return;
-		}
-		photo.likes.splice(toDeleteIndex, 1);
-		photo.save(function(err) {
-			if(err) {
-				response.status(400).send("couldn't save photo");
-				return;
-			}
-			response.end(JSON.stringify(photo));
-		});
-	});
-});
+// app.post('/unlike/:user_id', function(request, response) {
+// 	if(!request.session.login_name) {
+// 		response.status(400).send("Tried to view activity feed");
+// 		return;
+// 	}
+// 	var userId = request.params.user_id;
+// 	var photoId = request.body.photo_id;
+// 	Photo.findOne({id: photoId}, function(err, photo) {
+// 		if(err) {
+// 			console.log("Could not find photo");
+// 			response.status(400).send(err);
+// 			return;
+// 		}
+// 		var toDeleteIndex;
+// 		var notLikedYet = true;
+// 		for(var x in photo.likes) {
+// 			if(photo.likes[x] == userId) { 
+// 				notLikedYet = false;
+// 				toDeleteIndex = x;
+// 				break;
+// 			}
+// 		}
+// 		if(notLikedYet) {
+// 			console.log("Tried to like photo not already liked");
+// 			response.status(400).send("Tried to unlike photo not already liked");
+// 			return;
+// 		}
+// 		photo.likes.splice(toDeleteIndex, 1);
+// 		photo.save(function(err) {
+// 			if(err) {
+// 				response.status(400).send("couldn't save photo");
+// 				return;
+// 			}
+// 			response.end(JSON.stringify(photo));
+// 		});
+// 	});
+// });
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
