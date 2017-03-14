@@ -2,6 +2,28 @@
 	text-align: center;
 }
 
+.user-detail-article-container {
+    position: absolute;
+    top: 350px;
+    left: 400px;
+}
+
+.user-detail-post-profile-picture {
+	position: absolute !important;
+	top: 10px !important;
+	left: 10px !important;
+}
+
+.user-detail-post-user-name {
+	left: -140px !important;
+    top: 0px !important;
+}
+
+.user-detail-post-date {
+	top: -14px !important;
+    left: -157px !important;
+}
+
 .bias-meter-most {
     position: absolute;
     left: 1070px;

@@ -4,6 +4,12 @@
 cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', '$mdDialog', '$window', '$resource' ,'$rootScope',
  function ($scope, $route, $location, $mdDialog, $window, $resource, $rootScope) {
 	$scope.posts = [];
+
+	$scope.highBiasLevel = false;
+	if(Math.abs($scope.main.currentUser.bias_level) > 4) {
+		$scope.highBiasLevel = true;
+	}
+
 	var userName = function(userId) {
 		for(var i in $scope.main.users) {
 			if(userId === $scope.main.users[i].id) {
@@ -93,6 +99,10 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 		var res = $resource('/setBiasOfUser/' + $scope.main.currentUser._id);
 		//NOTE HERE THERE SHOULD MAYBE BE BETTER SOME WAY TO CALCULATE THE EFFECT THE ARTICLE READING HAS ON USER'S BIAS
 		var newBiasLevel = $scope.main.currentUser.bias_level + post.article_slant;
+		$scope.highBiasLevel = false;
+		if(Math.abs(newBiasLevel) > 4) {
+			$scope.highBiasLevel = true;
+		}
 		res.save({bias_level: newBiasLevel}, function () {
 			$rootScope.$broadcast('currentUserChanged');
 		}, function errorHandling(err) {
@@ -101,17 +111,25 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 		$window.open(post.url);
 	};
 
+
+
 	$scope.inviteToRead = function(ev, post) {
-		invitedPost = post;
-		invitedPost.currentUserName = $scope.main.currentUser.first_name;
-	    $mdDialog.show({
-	      controller: DialogController,
-	      templateUrl: 'dialog1.tmpl.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      clickOutsideToClose:true,
-	      fullscreen: false // Only for -xs, -sm breakpoints.
-	    });
+		if (Math.abs($scope.main.currentUser.bias_level) <= 4)
+		{
+			invitedPost = post;
+			invitedPost.currentUserName = $scope.main.currentUser.first_name;
+		    $mdDialog.show({
+		      controller: DialogController,
+		      templateUrl: 'dialog1.tmpl.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:true,
+		      fullscreen: false // Only for -xs, -sm breakpoints.
+		    });
+		} else {
+			console.log("You are too biased to invite to read.");
+
+		}
   	};
 
   	var messageToSend = "";

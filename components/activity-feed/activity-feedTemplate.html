@@ -33,6 +33,7 @@
 						<div class = "action-icon-and-word" ng-click = "inviteToRead($event, post)">
 							<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.jpg"></img>
 							<p class = "action invite-to-read"> Invite to Read </p>
+							<md-tooltip md-direction="bottom" ng-if="highBiasLevel">Your bias level is to high to invite others to read.</md-tooltip>
 						</div>
 					</div>
 				</li>
