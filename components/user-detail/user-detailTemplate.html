@@ -5,9 +5,9 @@
 		<div class = "cs142-user-detail">
 			<div class="profile-container">
 				<h1 class = "cs142-user-detail-name">{{user.first_name}} {{user.last_name}} </h1>
-				<div class = "profile-pic-darken" style = "opacity:{{user.bias_level/10}}"> </div>
+				<div class = "profile-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
 				<img class = "cs142-user-detail-profile-pic" ng-src = "/images/{{user.profile_pic_file}}"></img>
-				<div class="cover-pic-darken" style = "opacity:{{user.bias_level/10}}"> </div>
+				<div class="cover-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
 				<img class = "cs142-user-detail-cover-pic" ng-src = "/images/{{user.cover_pic_file}}"></img>
 			</div>
 		</div>

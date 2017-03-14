@@ -38,7 +38,7 @@
     <body layout="column">
 
         <md-toolbar layout = "row" class='cs142-toolbar'>
-            <div class="main-toolbar-profile-pic-darken" style="opacity:{{main.currentUser.bias_level/10}}" ng-click="showProfile()"></div>
+            <div class="main-toolbar-profile-pic-darken" style="opacity:{{main.currentUser.absolute_value_bias_level/10}}" ng-click="showProfile()"></div>
             <img ng-if = "main.userLoggedIn" class = "cs142-user-bar-profile-pic" ng-click="showProfile()" ng-src = "/images/{{main.currentUser.profile_pic_file}}"></img>
         	<button ng-if = "main.userLoggedIn" class = "cs142-activity-bar-button" ng-click="showProfile()">{{main.currentUser.first_name}}</button>
         	<button ng-if = "main.userLoggedIn"  class = "cs142-activity-bar-button" ng-click="showFeed()">Home</button>

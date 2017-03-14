@@ -6,11 +6,11 @@
 		<div>
 			<ul class = "cs142-activity-feed-list">
 				<li class = "cs142-activity-feed-element" ng-repeat="post in getPosts()">
-						<div class="feed-profile-pic-darken" style="opacity:{{post.bias_level/10}}" ng-click="showUserProfile(post.user_id)"></div>
+						<div class="feed-profile-pic-darken" style="opacity:{{post.absolute_value_bias_level/10}}" ng-click="showUserProfile(post.user_id)"></div>
 						<img class = "cs142-activity-feed-profile-pic" ng-src = "/images/{{post.profile_picture}}" ng-click="showUserProfile(post.user_id)"></img>
 						<p class = "cs142-activity-feed-user-name" ng-click="showUserProfile(post.user_id)">{{post.poster}}</p>
 						<p class = "cs142-activity-feed-date">{{post.date}}</p>
-						<div class = "cs142-activity-feed-article">
+						<div class = "cs142-activity-feed-article" ng-click="openArticle(post)">
 							<img class = "cs142-activity-article-photo" ng-src = "/images/{{post.article_picture}}"></img>
 							<p class = "cs142-activity-feed-title">{{post.article_title}}</p>
 							<p class = "cs142-activity-feed-subtitle">{{post.article_subtitle}}</p>
@@ -37,9 +37,15 @@
 					</div>
 				</li>
 			</ul>
-			<script type="text/ng-template" id="dialog1.tmpl.html"><md-dialog aria-label="Mango (Fruit)">
+
+			<div ng-if="showMessageTab" class="chat-message-tab">
+				THIS IS THE MESSAGE TAB
+			</div>
+
+			<script type="text/ng-template" id="dialog1.tmpl.html">
+			<md-dialog aria-label="Mango (Fruit)" class="invite-to-read-dialog">
   <form ng-cloak style="z-index:999">
-    <md-toolbar>
+    <md-toolbar class="invite-to-read-dialog-toolbar">
       <div class="md-toolbar-tools">
         <h2>Invite to Read</h2>
         <span flex></span>
@@ -52,24 +58,75 @@
     <md-dialog-content>
       <div class="md-dialog-content">
         <p>
-                 Dear {{invitedPost.poster}} <br/>I saw that you read {{invitedPost.article_title}} and I want to invite you to read something new to ~open your mind~.<br/>
-          BOX FOR THEM TO ENTER THE URL GOES HERE!!!
-        </p>
+                 Dear {{invitedPost.poster.split(" ")[0]}}, 
+
+                 <br/>
+                 <form>
+	                 <input type="radio" ng-model="message.type" name="message" value="neutral" checked> 
+	                 	I saw that you posted the article {{invitedPost.article_title}} which seems in line with your news reading bias.<br>
+	               	<input type="radio" ng-model="message.type" name="message" value="aggressive">
+	                	 I saw your post about the article {{invitedPost.article_title}} and I don&#39;t agree with you. Please read this to get a new perspective on the issue. </br>
+	               	<input type="radio" ng-model="message.type" name="message" value="nice">
+						After reading the article you posted, {{invitedPost.article_title}}, I realize that we have a difference of opinion. I don&#39;t expect you to change your mind, but I think it is important to read different opinions. <br/> 
+				</form>
+
+                 I would like to invite you to read: <br/>
+
+          <input type="text" name="url" placeholder="Enter Article URL">
+          <br/>
 
         <p>
-          Thanks!
+          From, 
         </p>
-        <p>
-  			Anonymous / Name checkboxes go here!
-        </p>
+        	<form>
+        		<input type="radio" ng-model="message.from" name="name" value="Anonymous" checked> Anonymous
+        		<br/>
+        		<input type="radio" name="name" value={{invitedPost.currentUserName}} ng-model="message.from"> {{invitedPost.currentUserName}}
+        	</form>
       </div>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="sendInvitation()">
+      <md-button ng-click="sendInvitation($event)">
         Send
       </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>
+
+
+<script type="text/ng-template" id="chat.tmpl.html">
+<md-dialog aria-label="Mango (Fruit)" class="chat-dialog">
+  <form ng-cloak style="z-index:999">
+    <md-toolbar class="chat-dialog-toolbar">
+      <div class="md-toolbar-tools chat-dialog-title">
+        <h2>Message</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog" class="chat-dialog-close-icon"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content chat-dialog-content">
+      	<div class="chat-dialog-content-sent">
+       {{sentMessage}}
+       </div>
+       <div class="chat-dialog-content-received">
+       thanks for sending me this! Not sure I agree with you but it was an interesting read.
+       </div>
+       <div class="chat-dialog-content-sent" ng-repeat="message in getSentMessages()">
+       {{message.text}}
+       </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row" class="chat-dialog-input-container">
+      <span flex></span>
+      <input type="text" ng-model="newChatMessage" name="chatMessage"  ng-keyup="$event.keyCode == 13 ? sendNewMessage() : null" class="chat-dialog-input" placeholder="Type a message...">
     </md-dialog-actions>
   </form>
 </md-dialog>

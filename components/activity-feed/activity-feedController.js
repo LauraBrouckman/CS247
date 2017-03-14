@@ -1,8 +1,8 @@
 'use strict';
 
 
-cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', '$mdDialog', 
- function ($scope, $route, $location, $mdDialog) {
+cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', '$mdDialog', '$window', '$resource' ,'$rootScope',
+ function ($scope, $route, $location, $mdDialog, $window, $resource, $rootScope) {
 	$scope.posts = [];
 	var userName = function(userId) {
 		for(var i in $scope.main.users) {
@@ -40,6 +40,9 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 					obj.article_source = model[i].article_source;
 					obj.article_picture = model[i].article_pic_file;
 					obj.bias_level = model[i].bias_level;
+					obj.article_slant = model[i].article_slant;
+					obj.url = model[i].url;
+					obj.absolute_value_bias_level = Math.abs(obj.bias_level);
 					$scope.posts.push(obj);
 				}
 				else {
@@ -84,8 +87,23 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 
 	var invitedPost = {}
 
+
+
+	$scope.openArticle = function(post) {
+		var res = $resource('/setBiasOfUser/' + $scope.main.currentUser._id);
+		//NOTE HERE THERE SHOULD MAYBE BE BETTER SOME WAY TO CALCULATE THE EFFECT THE ARTICLE READING HAS ON USER'S BIAS
+		var newBiasLevel = $scope.main.currentUser.bias_level + post.article_slant;
+		res.save({bias_level: newBiasLevel}, function () {
+			$rootScope.$broadcast('currentUserChanged');
+		}, function errorHandling(err) {
+				console.log("Could not change the bias level");
+		});
+		$window.open(post.url);
+	};
+
 	$scope.inviteToRead = function(ev, post) {
 		invitedPost = post;
+		invitedPost.currentUserName = $scope.main.currentUser.first_name;
 	    $mdDialog.show({
 	      controller: DialogController,
 	      templateUrl: 'dialog1.tmpl.html',
@@ -96,9 +114,68 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 	    });
   	};
 
+  	var messageToSend = "";
+
+  	$scope.showMessageTab = false;
+
+  	var sendMessage = function(ev, message) {
+  		messageToSend = message;
+  		$scope.showMessageTab = true;
+  		$mdDialog.show({
+	      controller: ChatDialogController,
+	      templateUrl: 'chat.tmpl.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      clickOutsideToClose:true,
+	      fullscreen: false // Only for -xs, -sm breakpoints.
+	    });
+  	};
+
+
+  	function ChatDialogController($scope, $mdDialog) {
+  		$scope.sentMessage = messageToSend;
+  		$scope.messagesSent = [];
+  		$scope.newChatMessage = "";
+	  	$scope.hide = function() {
+	      $mdDialog.hide();
+	    };
+
+	    $scope.cancel = function() {
+	      $mdDialog.cancel();
+	    };
+
+	    $scope.getSentMessages = function() {
+	    	return $scope.messagesSent;
+	    }
+
+	    $scope.sendNewMessage = function() {
+	    	if($scope.newChatMessage != "") {
+	    		var m = {
+	    			text: $scope.newChatMessage,
+	    			id: Math.random()
+	    		}
+	    		$scope.messagesSent.push(m);
+	    		$scope.newChatMessage = "";
+	    	}
+	    }
+  	}
+
+
+
   function DialogController($scope, $mdDialog) {
   	$scope.invitedPost = invitedPost;
-  	console.log($scope.invitedPost);
+  	$scope.message = "";
+  	$scope.message = {
+		type: "neutral",
+		from: "Anonymous"
+	}
+
+	var messageDictionary = {
+		neutral: "I saw that you posted the article '" + invitedPost.article_title + "' which seems in line with your news reading bias.",
+		aggressive: "I saw your post about the article '" + invitedPost.article_title + "' and I don't agree with you. Please read this to get a new perspective on the issue.",
+		nice: "After reading the article you posted, '" + invitedPost.article_title + "' I realize that we have a difference of opinion. I don't expect you to change your mind, but I think it is important to read different opinions."
+	}
+
     $scope.hide = function() {
       $mdDialog.hide();
     };
@@ -107,8 +184,11 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
       $mdDialog.cancel();
     };
 
-    $scope.sendInvitation = function() {
+    $scope.sendInvitation = function(ev) {
     	//CODE TO SEND INVITATION TO CHALLENGE GOES HERE!!!
+    	var messageToSend = messageDictionary[$scope.message.type];
+    	messageToSend += " From: " + $scope.message.from;
+    	sendMessage(ev, messageToSend);
       $mdDialog.hide();
     };
   }

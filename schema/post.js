@@ -30,7 +30,9 @@ var postSchema = new mongoose.Schema({
 	article_source: String,
 	article_subtitle: String,
     profile_pic_file: String,
-    bias_level: Number
+    bias_level: Number,
+    article_slant: Number,
+    url: String
 });
 
 // the schema is useless so far

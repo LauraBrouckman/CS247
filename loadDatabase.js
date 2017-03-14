@@ -92,7 +92,9 @@ Promise.all(removePromises).then(function () {
                 article_source: post.article_source,
                 article_subtitle: post.article_subtitle,
                 profile_pic_file: post.user.profile_pic_file,
-                bias_level: post.user.bias_level
+                bias_level: post.user.bias_level,
+                url: post.url,
+                article_slant: post.article_slant
             }, function (err, postObj) {
                 if(err) {
                     console.error('Error create post', err);

@@ -8,6 +8,100 @@
 	cursor: pointer;
 }
 
+.invite-to-read-dialog {
+	width: 50%;
+}
+
+.chat-dialog {
+	width: 260px;
+	height: 336px;
+	position: absolute;
+	right: 100px;
+	bottom: 0px;
+}
+
+.chat-dialog-toolbar {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .20);
+    height: 26px;
+    min-height: 26px;
+    background-color: #4267b2;
+}
+
+.chat-dialog-title {
+    line-height: 18px;
+    font-weight: 700;
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.chat-dialog-close-icon {
+    height: 12px;
+    margin-right: -32px;
+    margin-bottom: 2px;
+}
+
+.chat-dialog-content {
+	overflow-y: scroll;
+	padding: 10px;
+	height: 250px;
+	padding: 0px !important;
+}
+
+.chat-dialog-content-received {
+	float: left;
+	margin-top: 10px;
+	background-color: #f1f0f0;
+    padding: 5px 8px 4px !important;
+    color: #4b4f56;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    word-wrap: break-word;
+    text-shadow: none;
+    text-align: left;
+    border-collapse: collapse;
+    border-radius: 10px;
+    width: 166px;
+    margin-left: 10px;
+}
+
+.chat-dialog-content-sent {
+	margin-top: 10px;
+    background-color: #4080ff;
+    padding: 5px 8px 4px !important;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    word-wrap: break-word;
+    text-shadow: none;
+    text-align: left;
+    border-collapse: collapse;
+    border-radius: 10px;
+    width: 166px;
+    float: right;
+    margin-right: 10px;
+}
+
+.chat-dialog-input {
+	width: 235px;
+    margin-left: -8px;
+    font-size: 13px;
+    border: none;
+}
+.chat-dialog-input:focus {
+	outline: none !important;
+}
+
+
+.chat-dialog-input-container {
+	position: absolute;
+	bottom: 0px;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.invite-to-read-dialog-toolbar {
+	background-color: #3b5998 !important;
+}
+
 .feed-profile-pic-darken {
 	position: absolute;
 	top: 10px;
@@ -34,7 +128,9 @@
 }
 
 .invite-to-read-icon {
-	height: 20px;
+	height: 16px;
+    bottom: 2px;
+    position: relative;
 }
 
 .share-icon {

@@ -55,35 +55,45 @@
    var users = [im, er, pt, rk, al, jo];
 
 
-   var post1 = {id: 1, article_pic_file: 'default_article.jpg', date_time: "2017-02-28 10:44:23", user: im, comments: [], likes: [], 
-               article_title: "Article title 1", article_source: "Article Source", article_subtitle: "Article subtitle"};
+   var post1 = {id: 1, article_pic_file: 'MSNBC_article.png', date_time: "2017-02-28 10:44:23", user: pt, comments: [], likes: [], 
+               article_title: "Lawrence on Trump: Lies can be impeachable offense", article_source: "MSNBC.COM", article_subtitle: "Why he saya the president is in violation of his oath of office", 
+               article_slant: 2, url: "http://www.msnbc.com/the-last-word/watch/lawrence-on-trump-lies-can-be-impeachable-offense-892649539938?cid=sm_npd_ms_fb_ma"};
    
-   var post2 = {id: 2, article_pic_file: 'default_article.jpg', date_time: "2017-03-1 1:44:23", user: er, comments: [], likes: [], 
-               article_title: "Article title 2", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post2 = {id: 2, article_pic_file: 'dailyCaller_article.jpg', date_time: "2017-03-1 1:44:23", user: im, comments: [], likes: [], 
+               article_title: "Tim Kaine’s Son Arrested For Rioting Against Trump", article_source: "DAILYCALLER.COM", article_subtitle: "The youngest son of Hillary Clinton's running mate, Virginia Sen. Tim Kaine...",
+               article_slant: -2, url: "http://dailycaller.com/2017/03/07/tim-kaines-son-arrested-for-rioting-against-trump/?utm_campaign=thedcmainpage&utm_source=Facebook&utm_medium=Social"}; 
    
-   var post3 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-3 9:44:23", user: pt, comments: [], likes: [], 
-               article_title: "Article title 3", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post3 = {id: 3, article_pic_file: 'occupyDems_article.png', date_time: "2017-03-3 9:44:23", user: jo, comments: [], likes: [], 
+               article_title: "Trump’s Women’s Day Tweet Just Blew Up In His Face", article_source: "OCCUPYDEMOCRATS.COM", article_subtitle: "Twitter is SAVAGING President Trump for his condescending hypocrisy.",
+               article_slant: 2, url: "http://occupydemocrats.com/2017/03/08/trumps-womens-day-tweet-just-blew-face/"}; 
 
-   var post4 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-4 20:44:23", user: pt, comments: [], likes: [], 
-               article_title: "Article title 4", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post4 = {id: 4, article_pic_file: 'breitbart_article.png', date_time: "2017-03-4 20:44:23", user: pt, comments: [], likes: [], 
+               article_title: "American Hiring at Three-Year High in February", article_source: "BREITBART.COM", article_subtitle: "Trump Jobs Boom.",
+               article_slant: -2, url: "http://www.breitbart.com/big-government/2017/03/08/american-hiring-at-three-year-high-in-february-under-trump-administration/?utm_source=facebook&utm_medium=social"}; 
 
-   var post5 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-5 12:44:23", user: rk, comments: [], likes: [], 
-               article_title: "Article title 5", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post5 = {id: 5, article_pic_file: 'nyt_article1.png', date_time: "2017-03-5 12:44:23", user: al, comments: [], likes: [], 
+               article_title: "A Girl Stands Firm on Wall Street", article_source: "NYT.COM", article_subtitle: "The Wall Street girl celebrates all the people who resisted by staying in place.",
+               article_slant: 1, url: "https://www.nytimes.com/2017/03/08/opinion/little-girl-statue-wall-street-bull.html"}; 
 
-   var post6 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-6 7:44:23", user: al, comments: [], likes: [], 
-               article_title: "Article title 6", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post6 = {id: 6, article_pic_file: 'nyt_article2.png', date_time: "2017-03-6 7:44:23", user: al, comments: [], likes: [], 
+               article_title: "No Wonder the Republicans Hid the Health Bill", article_source: "NYT.COM", article_subtitle: "Republican House leaders have spent months dodging questions about how they would replace the Affordable Care Act",
+               article_slant: 1, url: "https://www.nytimes.com/2017/03/07/opinion/no-wonder-the-republicans-hid-the-health-bill.html"}; 
 
-   var post7 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-1 2:44:23", user: jo, comments: [], likes: [], 
-               article_title: "Article title 7", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post7 = {id: 7, article_pic_file: 'fox_article1.png', date_time: "2017-03-1 2:44:23", user: er, comments: [], likes: [], 
+               article_title: "I'm a Democrat and it's time for our party to apologize to America", article_source: "FOXNEWS.COM", article_subtitle: "Smart Democrats know that our position with the American people is just as weak.",
+               article_slant: -1, url: "http://www.foxnews.com/opinion/2017/02/28/im-democrat-and-its-time-for-our-party-to-apologize-to-america.html"}; 
 
-   var post8 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-2 13:44:23", user: im, comments: [], likes: [], 
-               article_title: "Article title 8", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post8 = {id: 8, article_pic_file: 'fox_article2.png', date_time: "2017-03-2 13:44:23", user: er, comments: [], likes: [], 
+               article_title: "Trump agency heads already rolling back Obama-era rules on their own", article_source: "FOXNEWS.COM", article_subtitle: "Interior Secretary Ryan Zinke was the latest to peel back red tape.",
+               article_slant: -1, url: "http://www.foxnews.com/politics/2017/03/08/trump-agency-heads-already-rolling-back-obama-era-rules-on-their-own.html"}; 
 
-   var post9 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-3 12:44:23", user: er, comments: [], likes: [], 
-               article_title: "Article title 9", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post9 = {id: 9, article_pic_file: 'atlantic_article2.png', date_time: "2017-03-3 12:44:23", user: im, comments: [], likes: [], 
+               article_title: "Is Israel's Travel Ban Comparable to Trump's?", article_source: "THEATLANTIC.COM", article_subtitle: "The Knesset passed a law that would deny entry to some foreign activists who support boycotting the Jewish state.",
+               article_slant: 0, url: "https://www.theatlantic.com/international/archive/2017/03/israel-travel-ban-comparison-trump/518913/"}; 
    
-   var post10 = {id: 3, article_pic_file: 'default_article.jpg', date_time: "2017-03-4 1:44:23", user: pt, comments: [], likes: [], 
-               article_title: "Article title 10", article_source: "Article Source", article_subtitle: "Article subtitle"}; 
+   var post10 = {id: 10, article_pic_file: 'atlantic_article1.png', date_time: "2017-03-4 1:44:23", user: im, comments: [], likes: [], 
+               article_title: "Can a Court Decision Help Close the Achievement Gap?", article_source: "THEATLANTIC.COM", article_subtitle: "The Kansas Supreme Court ordered the state to confront the inequality of its public-school funding.",
+               article_slant: 0, url: "https://www.theatlantic.com/education/archive/2017/03/can-a-court-decision-help-close-the-achievement-gap/518859/"}; 
 
 
    var posts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10];

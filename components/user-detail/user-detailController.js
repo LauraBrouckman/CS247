@@ -13,6 +13,7 @@ cs142App.controller('UserDetailController', ['$scope', '$routeParams',
 	$scope.FetchModel(url, function(model) {
 		$scope.$apply(function() {
 			$scope.user = model;
+			$scope.user.absolute_value_bias_level = Math.abs(model.bias_level);
 		});
 	});
 	url = 'http://localhost:3000/photosOfUser/' + userId;

@@ -158,7 +158,7 @@ app.get('/user/:id', function (request, response) {
 		return;
 	}
 	var id = request.params.id;
-    User.findOne({_id: id}).select('id first_name last_name bias_level profile_pic_file cover_pic_file').exec(function(err, user){
+    User.findOne({_id: id}).select('id first_name last_name bias_level profile_pic_file cover_pic_file ').exec(function(err, user){
 		if(err) {
 			response.status(400).send(err.message);
 		}
@@ -242,6 +242,31 @@ app.get('/admin/logout', function(request, response) {
 		}
 		response.status(200).send();
 		return;
+	});
+});
+
+app.post('/setBiasOfUser/:user_id', function(request, response) {
+	var userId = request.params.user_id;
+	var bias_level = request.body.bias_level;
+	if(!bias_level) {
+		response.status(400).send("No new bias level");
+		return;
+	}
+	User.findOne({_id: userId}, function(err, user) {
+		console.log("found user " + user.first_name);
+		if(err) {
+			response.status(400).send(err.message);
+			return;
+		}
+		user.bias_level = bias_level;
+		user.save(function(err) {
+			if(err) {
+				console.log(err);
+				response.status(400).send();
+				return;
+			}
+			response.end(JSON.stringify(user));
+		});
 	});
 });
 

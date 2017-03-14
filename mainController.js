@@ -44,6 +44,7 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
 				var res = $resource('/admin/login');
 				res.save({login_name: "kenobi", password: "weak"}, function (model) {
 					$scope.main.currentUser = model;
+					$scope.main.currentUser.absolute_value_bias_level = Math.abs(model.bias_level)
 					$scope.errorMessage = "";
 					$scope.main.userLoggedIn = true;
 					$rootScope.$broadcast('loggedIn');
@@ -56,6 +57,16 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
 				// 	$location.path("/login-register");
 				// }
 			}
+		});
+
+		$rootScope.$on('currentUserChanged', function() {
+			var url = 'http://localhost:3000/user/' + $scope.main.currentUser._id;
+			$scope.FetchModel(url, function(model) {
+				$scope.$apply(function() {
+					$scope.main.currentUser = model;
+					$scope.main.currentUser.absolute_value_bias_level = Math.abs(model.bias_level)
+				});
+			});
 		});
 		
 
