@@ -10,6 +10,10 @@
 				<div class="cover-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
 				<img class = "cs142-user-detail-cover-pic" ng-src = "/images/{{user.cover_pic_file}}"></img>
 			</div>
+			<div class="bias-meter-most"> Most biased </div>
+			<img class="bias-meter-image" src='/images/bias_meter.png'></img>
+			<hr class="bias-meter-line" style="top:{{(user.absolute_value_bias_level/10 * 190)+35}}px"></hr>
+			<div class="bias-meter-least"> Least biased </div>
 		</div>
 
     </body>

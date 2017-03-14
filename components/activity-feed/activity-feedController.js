@@ -116,31 +116,77 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 
   	var messageToSend = "";
 
+  	var nameOnChatTab = "";
+
+  	$scope.nameOnChatTab = "";
+
   	$scope.showMessageTab = false;
 
-  	var sendMessage = function(ev, message) {
+  	var sendMessage = function(ev, message, poster) {
   		messageToSend = message;
-  		$scope.showMessageTab = true;
+  		nameOnChatTab = poster;
+  		newChatMessages = [];
+  		$scope.nameOnChatTab = poster;
+  		$scope.showMessageTab = false;
   		$mdDialog.show({
 	      controller: ChatDialogController,
 	      templateUrl: 'chat.tmpl.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:true,
-	      fullscreen: false // Only for -xs, -sm breakpoints.
+	      clickOutsideToClose:false,
+	      fullscreen: false,
+	      multiple: true,
+	      openFrom: {
+	          top: 2000,
+	          width: 125,
+	          height: 50,
+	          left: 2000 
+	      },
+        closeTo: {
+          	  top: 2000,
+	          width: 125,
+	          height: 50,
+	          left: 2000 
+        } // Only for -xs, -sm breakpoints.
 	    });
   	};
 
+  	var showMessageTab = function() {
+	      $scope.showMessageTab = true;
+  	}
 
-  	function ChatDialogController($scope, $mdDialog) {
+  	var newChatMessages = [];
+
+  	$scope.showChat = function(ev) {
+  		$scope.showMessageTab = false;
+  		$mdDialog.show({
+	      controller: ChatDialogController,
+	      templateUrl: 'chat.tmpl.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      clickOutsideToClose:false,
+	      fullscreen: false // Only for -xs, -sm breakpoints.
+	    });
+  	}
+
+
+  	function ChatDialogController($scope, $mdDialog, $timeout) {
   		$scope.sentMessage = messageToSend;
   		$scope.messagesSent = [];
+  		$scope.showReceivedMessage = false;
+  		$scope.nameOnTab = nameOnChatTab;
+  		$timeout(function(){ $scope.showReceivedMessage = true;}, 3000);
+  		for (var i = 0; i < newChatMessages.length; i++) {
+  			$scope.messagesSent.push(newChatMessages[i]);
+  		}
   		$scope.newChatMessage = "";
 	  	$scope.hide = function() {
 	      $mdDialog.hide();
+	    	showMessageTab()
 	    };
 
 	    $scope.cancel = function() {
+	    	showMessageTab()
 	      $mdDialog.cancel();
 	    };
 
@@ -154,7 +200,10 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 	    			text: $scope.newChatMessage,
 	    			id: Math.random()
 	    		}
+	    		newChatMessages.push({text: $scope.newChatMessage, id: Math.random()});
 	    		$scope.messagesSent.push(m);
+	    		console.log(newChatMessages);
+	    		console.log($scope.messagesSent);
 	    		$scope.newChatMessage = "";
 	    	}
 	    }
@@ -165,6 +214,7 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
   function DialogController($scope, $mdDialog) {
   	$scope.invitedPost = invitedPost;
   	$scope.message = "";
+  	$scope.articleUrl = "";
   	$scope.message = {
 		type: "neutral",
 		from: "Anonymous"
@@ -185,11 +235,14 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
     };
 
     $scope.sendInvitation = function(ev) {
-    	//CODE TO SEND INVITATION TO CHALLENGE GOES HERE!!!
-    	var messageToSend = messageDictionary[$scope.message.type];
-    	messageToSend += " From: " + $scope.message.from;
-    	sendMessage(ev, messageToSend);
-      $mdDialog.hide();
+    	if($scope.articleUrl == "") {
+    		console.log("error there is no url posted");
+    	}
+    		var messageToSend = "Hi " + $scope.invitedPost.poster.split(" ")[0] + ",\n";
+    		messageToSend += messageDictionary[$scope.message.type];
+    		messageToSend += "I would like to invite you to read " + $scope.articleUrl;
+    		sendMessage(ev, messageToSend, $scope.invitedPost.poster);
+    	  $mdDialog.hide();
     };
   }
 		

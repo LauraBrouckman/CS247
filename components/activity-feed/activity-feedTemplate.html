@@ -31,15 +31,17 @@
 							<p class = "action share"> Share </p>
 						</div>
 						<div class = "action-icon-and-word" ng-click = "inviteToRead($event, post)">
-							<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.png"></img>
+							<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.jpg"></img>
 							<p class = "action invite-to-read"> Invite to Read </p>
 						</div>
 					</div>
 				</li>
 			</ul>
 
-			<div ng-if="showMessageTab" class="chat-message-tab">
-				THIS IS THE MESSAGE TAB
+			<div ng-if="showMessageTab" class="chat-message-tab" ng-click="showChat($event)">
+				<div class="chat-message-tab-text">
+				{{nameOnChatTab}}
+			</div>
 			</div>
 
 			<script type="text/ng-template" id="dialog1.tmpl.html">
@@ -58,7 +60,7 @@
     <md-dialog-content>
       <div class="md-dialog-content">
         <p>
-                 Dear {{invitedPost.poster.split(" ")[0]}}, 
+                 Hi {{invitedPost.poster.split(" ")[0]}}, 
 
                  <br/>
                  <form>
@@ -72,7 +74,7 @@
 
                  I would like to invite you to read: <br/>
 
-          <input type="text" name="url" placeholder="Enter Article URL">
+          <input ng-model="articleUrl" type="text" name="url" placeholder="Enter Article URL">
           <br/>
 
         <p>
@@ -101,8 +103,8 @@
 <md-dialog aria-label="Mango (Fruit)" class="chat-dialog">
   <form ng-cloak style="z-index:999">
     <md-toolbar class="chat-dialog-toolbar">
-      <div class="md-toolbar-tools chat-dialog-title">
-        <h2>Message</h2>
+      <div class="md-toolbar-tools chat-dialog-title" ng-click="cancel()">
+        <h2>{{nameOnTab}}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog" class="chat-dialog-close-icon"></md-icon>
@@ -115,7 +117,7 @@
       	<div class="chat-dialog-content-sent">
        {{sentMessage}}
        </div>
-       <div class="chat-dialog-content-received">
+       <div class="chat-dialog-content-received" ng-if="showReceivedMessage">
        thanks for sending me this! Not sure I agree with you but it was an interesting read.
        </div>
        <div class="chat-dialog-content-sent" ng-repeat="message in getSentMessages()">

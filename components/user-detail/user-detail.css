@@ -2,6 +2,44 @@
 	text-align: center;
 }
 
+.bias-meter-most {
+    position: absolute;
+    left: 1070px;
+    z-index: 999;
+    width: 34px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+    top: 10px;
+}
+
+.bias-meter-least {
+    position: absolute;
+    left: 1070px;
+    z-index: 999;
+    font-size: 12px;
+    width: 34px;
+    text-align: center;
+    top: 240px;
+}
+
+.bias-meter-image {
+    height: 210px;
+    z-index: 991;
+    position: absolute;
+    left: 1067px;
+    top: 37px;
+}
+
+.bias-meter-line {
+    width: 31px;
+    position: absolute;
+    z-index: 999;
+    border: 2px solid red;
+    left: 1068px;
+    border-radius: 1px;
+}
+
 .profile-container {
 	width: 851px;
 	position: relative;

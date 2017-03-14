@@ -32,6 +32,7 @@
     font-weight: 700;
     font-family: Arial;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .chat-dialog-close-icon {
@@ -128,9 +129,7 @@
 }
 
 .invite-to-read-icon {
-	height: 16px;
-    bottom: 2px;
-    position: relative;
+	height: 22px;
 }
 
 .share-icon {
@@ -141,6 +140,29 @@
 	margin-left: 6px;
 }
 
+.chat-message-tab {	
+    position: fixed;
+    bottom: 0px;
+    color: #333;
+    background-color: #f1f2f4;
+    height: 30px;
+    width: 160px;
+    right: 100px;
+    border-top-left-radius: 3px;
+    border: 1px solid #dddfe2;
+    border-top-right-radius: 3px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    line-height: 15px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.chat-message-tab-text {
+	 padding: 10px;
+    position: relative;
+    padding-left: 25px;
+}
 
 .action {
 	display: inline-block;
