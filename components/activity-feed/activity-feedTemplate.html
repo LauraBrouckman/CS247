@@ -1,139 +1,146 @@
 <!doctype html>
 <html ng-app="cs142App" ng-controller="activity-feedController">
-    <head></head>
+<head></head>
 
-    <body>
-		<div>
-			<ul class = "cs142-activity-feed-list">
-				<li class = "cs142-activity-feed-element" ng-repeat="post in getPosts()">
-						<div class="feed-profile-pic-darken" style="opacity:{{post.absolute_value_bias_level/10}}" ng-click="showUserProfile(post.user_id)"></div>
-						<img class = "cs142-activity-feed-profile-pic" ng-src = "/images/{{post.profile_picture}}" ng-click="showUserProfile(post.user_id)"></img>
-						<p class = "cs142-activity-feed-user-name" ng-click="showUserProfile(post.user_id)">{{post.poster}}</p>
-						<p class = "cs142-activity-feed-date">{{post.date}}</p>
-						<div class = "cs142-activity-feed-article" ng-click="openArticle(post)">
-							<img class = "cs142-activity-article-photo" ng-src = "/images/{{post.article_picture}}"></img>
-							<p class = "cs142-activity-feed-title">{{post.article_title}}</p>
-							<p class = "cs142-activity-feed-subtitle">{{post.article_subtitle}}</p>
-							<p class = "cs142-activity-feed-source">{{post.article_source}}</p>
+<body>
+	<div>
+		<ul class = "cs142-activity-feed-list">
+			<li class = "cs142-activity-feed-element" ng-repeat="post in getPosts()">
+				<div class="feed-profile-pic-darken" style="opacity:{{post.absolute_value_bias_level/10}}" ng-click="showUserProfile(post.user_id)"></div>
+				<img class = "cs142-activity-feed-profile-pic" ng-src = "/images/{{post.profile_picture}}" ng-click="showUserProfile(post.user_id)"></img>
+				<p class = "cs142-activity-feed-user-name" ng-click="showUserProfile(post.user_id)">{{post.poster}}</p>
+				<p class = "cs142-activity-feed-date">{{post.date}}</p>
+				<div class = "cs142-activity-feed-article" ng-click="openArticle(post)">
+					<img class = "cs142-activity-article-photo" ng-src = "/images/{{post.article_picture}}"></img>
+					<p class = "cs142-activity-feed-title">{{post.article_title}}</p>
+					<p class = "cs142-activity-feed-subtitle">{{post.article_subtitle}}</p>
+					<p class = "cs142-activity-feed-source">{{post.article_source}}</p>
+				</div>
+				<hr class="horizontal-line"/>
+				<div class "actions-section">
+					<div class = "action-icon-and-word">
+						<img class = "like-icon" ng-src = "/images/like_icon.png"></img>
+						<p class = "action like"> Like </p>
 					</div>
-					<hr class="horizontal-line"/>
-					<div class "actions-section">
-						<div class = "action-icon-and-word">
-							<img class = "like-icon" ng-src = "/images/like_icon.png"></img>
-							<p class = "action like"> Like </p>
-						</div>
-						<div class = "action-icon-and-word">
-							<img class = "comment-icon" ng-src = "/images/comment_icon.png"></img>
-							<p class = "action comment"> Comment </p>
-						</div>
-						<div class = "action-icon-and-word">
-							<img class = "share-icon" ng-src = "/images/share_icon.png"></img>
-							<p class = "action share"> Share </p>
-						</div>
-						<div class = "action-icon-and-word" ng-click = "inviteToRead($event, post)">
-							<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.jpg"></img>
-							<p class = "action invite-to-read"> Invite to Read </p>
-							<md-tooltip md-direction="bottom" ng-if="highBiasLevel">Your bias level is to high to invite others to read.</md-tooltip>
-						</div>
+					<div class = "action-icon-and-word">
+						<img class = "comment-icon" ng-src = "/images/comment_icon.png"></img>
+						<p class = "action comment"> Comment </p>
 					</div>
-				</li>
-			</ul>
+					<div class = "action-icon-and-word">
+						<img class = "share-icon" ng-src = "/images/share_icon.png"></img>
+						<p class = "action share"> Share </p>
+					</div>
+					<div class = "action-icon-and-word" style="float: right; position: relative;top: 5px;"ng-click = "inviteToRead($event, post)">
+						<img class = "invite-to-read-icon" ng-src = "/images/invite_to_read_icon.png"></img>
+						<p class = "action invite-to-read"> Reframe </p>
+						<md-tooltip md-direction="bottom" ng-if="highBiasLevel">Your bias level is to high to ask others to reframe.</md-tooltip>
+					</div>
+				</div>
+			</li>
+		</ul>
 
-			<div ng-if="showMessageTab" class="chat-message-tab" ng-click="showChat($event)">
-				<div class="chat-message-tab-text">
+		<div ng-if="showMessageTab" class="chat-message-tab" ng-click="showChat($event)">
+			<div class="chat-message-tab-text">
 				{{nameOnChatTab}}
 			</div>
-			</div>
-
-			<script type="text/ng-template" id="dialog1.tmpl.html">
-			<md-dialog aria-label="Mango (Fruit)" class="invite-to-read-dialog">
-  <form ng-cloak style="z-index:999">
-    <md-toolbar class="invite-to-read-dialog-toolbar">
-      <div class="md-toolbar-tools">
-        <h2>Invite to Read</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-
-    <md-dialog-content>
-      <div class="md-dialog-content">
-        <p>
-                 Hi {{invitedPost.poster.split(" ")[0]}}, 
-
-                 <br/>
-                 <form>
-	                 <input type="radio" ng-model="message.type" name="message" value="neutral" checked> 
-	                 	I saw that you posted the article {{invitedPost.article_title}} which seems in line with your news reading bias.<br>
-	               	<input type="radio" ng-model="message.type" name="message" value="aggressive">
-	                	 I saw your post about the article {{invitedPost.article_title}} and I don&#39;t agree with you. Please read this to get a new perspective on the issue. </br>
-	               	<input type="radio" ng-model="message.type" name="message" value="nice">
-						After reading the article you posted, {{invitedPost.article_title}}, I realize that we have a difference of opinion. I don&#39;t expect you to change your mind, but I think it is important to read different opinions. <br/> 
-				</form>
-
-                 I would like to invite you to read: <br/>
-
-          <input ng-model="articleUrl" type="text" name="url" placeholder="Enter Article URL">
-          <br/>
-
-        <p>
-          From, 
-        </p>
-        	<form>
-        		<input type="radio" ng-model="message.from" name="name" value="Anonymous" checked> Anonymous
-        		<br/>
-        		<input type="radio" name="name" value={{invitedPost.currentUserName}} ng-model="message.from"> {{invitedPost.currentUserName}}
-        	</form>
-      </div>
-    </md-dialog-content>
-
-    <md-dialog-actions layout="row">
-      <span flex></span>
-      <md-button ng-click="sendInvitation($event)">
-        Send
-      </md-button>
-    </md-dialog-actions>
-  </form>
-</md-dialog>
-</script>
-
-
-<script type="text/ng-template" id="chat.tmpl.html">
-<md-dialog aria-label="Mango (Fruit)" class="chat-dialog">
-  <form ng-cloak style="z-index:999">
-    <md-toolbar class="chat-dialog-toolbar">
-      <div class="md-toolbar-tools chat-dialog-title" ng-click="cancel()">
-        <h2>{{nameOnTab}}</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog" class="chat-dialog-close-icon"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-
-    <md-dialog-content>
-      <div class="md-dialog-content chat-dialog-content">
-      	<div class="chat-dialog-content-sent">
-       {{sentMessage}}
-       </div>
-       <div class="chat-dialog-content-received" ng-if="showReceivedMessage">
-       thanks for sending me this! Not sure I agree with you but it was an interesting read.
-       </div>
-       <div class="chat-dialog-content-sent" ng-repeat="message in getSentMessages()">
-       {{message.text}}
-       </div>
-      </div>
-    </md-dialog-content>
-
-    <md-dialog-actions layout="row" class="chat-dialog-input-container">
-      <span flex></span>
-      <input type="text" ng-model="newChatMessage" name="chatMessage"  ng-keyup="$event.keyCode == 13 ? sendNewMessage() : null" class="chat-dialog-input" placeholder="Type a message...">
-    </md-dialog-actions>
-  </form>
-</md-dialog>
-</script>
 		</div>
-    </body>
+
+		<script type="text/ng-template" id="dialog1.tmpl.html">
+		<md-dialog aria-label="Mango (Fruit)" class="invite-to-read-dialog">
+		<form ng-cloak style="z-index:999">
+		<md-toolbar class="invite-to-read-dialog-toolbar">
+		<div class="md-toolbar-tools">
+		<h2 class="dialog-title">Reframe</h2>
+		<span flex></span>
+		<md-button class="md-icon-button" ng-click="cancel()">
+		<md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog"></md-icon>
+		</md-button>
+		</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+		<div class="md-dialog-content" style="padding-top:10px;">
+		<p>
+			<p>
+			Hi {{invitedPost.poster.split(" ")[0]}}, 
+			</p>
+		<form>
+		<div>
+			<input type="radio" ng-model="message.type" name="message" value="neutral" checked> 
+			<div class="reframe-option-text">I saw that you posted the article {{invitedPost.article_title}} which seems in line with your news reading behavior.<br></div>
+		</div>
+		<div>
+			<input type="radio" ng-model="message.type" name="message" value="aggressive">
+			<div class="reframe-option-text">I saw your post about the article {{invitedPost.article_title}} and I don&#39;t agree with you. Please read this to get a new perspective on the issue. </br></div>
+		</div>
+		<div>
+			<input type="radio" ng-model="message.type" name="message" value="nice">
+			<div class="reframe-option-text">After reading the article you posted, {{invitedPost.article_title}}, I realize that we have a difference of opinion. I don&#39;t expect you to change your mind, but I think it is important to read different opinions. <br/> </div>
+		</div>
+		</form>
+
+		<p style="margin:5px">I would like to invite you to read: </p><br/>
+
+		<input class="reframe-url-input" style="border-color:{{urlBorderColor}}" ng-model="articleUrl" type="text" name="url" placeholder="Enter Article URL">
+		<br/>
+
+		<p style="margin-bottom:7px">
+		From, 
+		</p>
+		<form style="padding-left:35px;">
+		<input type="radio" ng-model="message.from" name="name" value="Anonymous" style="margin-bottom:10px" checked> Anonymous
+		<br/>
+		<input type="radio" name="name" value={{invitedPost.currentUserName}} ng-model="message.from"> {{invitedPost.currentUserName}}
+		</form>
+		</div>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+		<span flex></span>
+		<span ng-if="noUrl" class="no-url-error">Error: You must enter an article URL before sending your reframe. </span>
+		<md-button ng-click="sendInvitation($event)">
+		Send
+		</md-button>
+		</md-dialog-actions>
+		</form>
+		</md-dialog>
+		</script>
+
+
+		<script type="text/ng-template" id="chat.tmpl.html">
+		<md-dialog aria-label="Mango (Fruit)" class="chat-dialog">
+		<form ng-cloak style="z-index:999">
+		<md-toolbar class="chat-dialog-toolbar">
+		<div class="md-toolbar-tools chat-dialog-title" ng-click="cancel()">
+		<h2>{{nameOnTab}}</h2>
+		<span flex></span>
+		<md-button class="md-icon-button" ng-click="cancel()">
+		<md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog" class="chat-dialog-close-icon"></md-icon>
+		</md-button>
+		</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+		<div class="md-dialog-content chat-dialog-content">
+		<div class="chat-dialog-content-sent">
+		{{sentMessage}}
+		</div>
+		<div class="chat-dialog-content-received" ng-if="showReceivedMessage">
+		thanks for sending me this! Not sure I agree with you but it was an interesting read.
+		</div>
+		<div class="chat-dialog-content-sent" ng-repeat="message in getSentMessages()">
+		{{message.text}}
+		</div>
+		</div>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row" class="chat-dialog-input-container">
+		<span flex></span>
+		<input type="text" ng-model="newChatMessage" name="chatMessage"  ng-keyup="$event.keyCode == 13 ? sendNewMessage() : null" class="chat-dialog-input" placeholder="Type a message...">
+		</md-dialog-actions>
+		</form>
+		</md-dialog>
+		</script>
+	</div>
+</body>
 </html>

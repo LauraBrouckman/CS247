@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource']);
 
@@ -31,13 +31,14 @@ cs142App.config(['$routeProvider',
     }]);
 
 	
-cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$resource', '$http', '$route',
-    function ($scope, $rootScope, $location, $resource, $http, $route) {
+cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$resource', '$http', '$route', '$mdDialog',
+    function ($scope, $rootScope, $location, $resource, $http, $route, $mdDialog) {
 		$scope.main = {};
 		$scope.main.users = [];
 		$scope.main.currentUser = {};
 		$scope.main.userLoggedIn = false; 
 		$scope.main.invitedPost = {};
+		$scope.main.title = "(1) Fakebook"
 		
 		$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 			if (!$scope.main.userLoggedIn) {
@@ -59,6 +60,21 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
 			}
 		});
 
+
+
+		  $scope.showNotificationDialog = function(ev) {
+			$mdDialog.show({
+			      controller: InfoDialogController,
+			      templateUrl: 'info.tmpl.html',
+			      parent: angular.element(document.body),
+			      targetEvent: ev,
+			      clickOutsideToClose:true,
+			      fullscreen: false,
+			      scope: $scope,
+			      preserveScope: true // Only for -xs, -sm breakpoints.
+		    });
+		  };
+
 		$rootScope.$on('currentUserChanged', function() {
 			var url = 'http://localhost:3000/user/' + $scope.main.currentUser._id;
 			$scope.FetchModel(url, function(model) {
@@ -69,6 +85,20 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
 			});
 		});
 		
+		$scope.showNotificationDiv = false;
+		$scope.newNotification = true;
+
+
+		$scope.showNotification = function() {
+			$scope.newNotification = false;
+			$scope.main.title = "Fakebook";
+			$scope.showNotificationDiv = !$scope.showNotificationDiv;
+		};
+
+		$scope.hideNotification = function()
+		{
+			$scope.showNotificationDiv=false
+		};
 
 		$scope.showProfile = function() {
 			$location.path('/users/' + $scope.main.currentUser.id);
@@ -94,6 +124,20 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
 			xhr.open("GET", url);
 			xhr.send();
 		};
+
+
+
+  	function InfoDialogController($scope, $mdDialog, $timeout) {
+	  	$scope.hide = function() {
+	      $mdDialog.hide();
+	      $scope.hideNotification();
+	    };
+
+	    $scope.cancel = function() {
+	      	$mdDialog.cancel();
+	     	$scope.hideNotification();
+	    };
+  	}
 		
 	
     }]);

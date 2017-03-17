@@ -1,47 +1,93 @@
 <!doctype html>
 <html ng-app="cs142App" ng-controller="user-detailController">
-    <head></head>
-    <body>
-		<div class = "cs142-user-detail">
-			<div class="profile-container">
-				<h1 class = "cs142-user-detail-name">{{user.first_name}} {{user.last_name}} </h1>
-				<div class = "profile-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
-				<img class = "cs142-user-detail-profile-pic" ng-src = "/images/{{user.profile_pic_file}}"></img>
-				<div class="cover-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
-				<img class = "cs142-user-detail-cover-pic" ng-src = "/images/{{user.cover_pic_file}}"></img>
+<head></head>
+<body style="background:red">
+	<div class = "cs142-user-detail" >
+		<div class="profile-container">
+			<h1 class = "cs142-user-detail-name">{{user.first_name}} {{user.last_name}} </h1>
+			<div class = "profile-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
+			<img class = "cs142-user-detail-profile-pic" ng-src = "/images/{{user.profile_pic_file}}"></img>
+			<div class="cover-pic-darken" style = "opacity:{{user.absolute_value_bias_level/10}}"> </div>
+			<img class = "cs142-user-detail-cover-pic" ng-src = "/images/{{user.cover_pic_file}}"></img>
+			<div ng-if="onOwnPage" class="user-detail-reframe-button-container" ng-click="askForReframe($event)">
+				<img class="user-detail-reframe-button" ng-src="/images/invite_to_read_icon.png"></img>
+				<md-tooltip md-direction="bottom" >Ask for Reframe</md-tooltip>
+			</div>		
+				<div class="bias-meter-container">
+				<div class="bias-meter-title"> Bias Meter </div>
+				<img class="bias-meter-image" src='/images/bias_meter.png'></img>
+				<div class="bias-meter-line" style="left:{{(212 * user.absolute_value_bias_level/10) + 195}}px"></div>
 			</div>
-			<div class="bias-meter-most"> Most biased </div>
-			<img class="bias-meter-image" src='/images/bias_meter.png'></img>
-			<hr class="bias-meter-line" style="top:{{(user.absolute_value_bias_level/10 * 190)+35}}px"></hr>
-			<div class="bias-meter-least"> Least biased </div>
-
-			<div class = "cs142-activity-feed-element user-detail-article-container">
-				<div class="feed-profile-pic-darken" style="opacity:{{user.absolute_value_bias_level/10}}"></div>
-				<img class = "cs142-activity-feed-profile-pic user-detail-post-profile-picture" ng-src = "/images/{{user.profile_pic_file}}"></img>
-				<p class = "cs142-activity-feed-user-name user-detail-post-user-name" ng-click="showUserProfile(post.user_id)">{{user.first_name}} {{user.last_name}}</p>
-				<p class = "cs142-activity-feed-date user-detail-post-date">1 week ago</p>
-				<div class = "cs142-activity-feed-article"  style="margin-top: 20px !important">
-				<img class = "cs142-activity-article-photo" ng-src = "/images/default_article.jpg"></img>
-					<p class = "cs142-activity-feed-title" style="position: relative; left: -39px;">The situation in the White House is interesting.</p>
-					<p class = "cs142-activity-feed-subtitle">Things are really starting to get crazy in the second month of trumps presidency</p>
-					<p class = "cs142-activity-feed-source" style="width: 64px">NYT.COM</p>
-				</div>
-					<hr class="horizontal-line"/>
-					<div class "actions-section" style="width: 300px">
-						<div class = "action-icon-and-word">
-							<img class = "like-icon" ng-src = "/images/like_icon.png"></img>
-							<p class = "action like"> Like </p>
-						</div>
-						<div class = "action-icon-and-word">
-							<img class = "comment-icon" ng-src = "/images/comment_icon.png"></img>
-							<p class = "action comment"> Comment </p>
-						</div>
-						<div class = "action-icon-and-word">
-							<img class = "share-icon" ng-src = "/images/share_icon.png"></img>
-							<p class = "action share"> Share </p>
-						</div>
-					</div>
 		</div>
 
-    </body>
+
+
+
+
+		<div class = "cs142-activity-feed-element user-detail-article-container">
+			<div class="feed-profile-pic-darken" style="opacity:{{user.absolute_value_bias_level/10}}"></div>
+			<img class = "cs142-activity-feed-profile-pic user-detail-post-profile-picture" ng-src = "/images/{{user.profile_pic_file}}"></img>
+			<p class = "cs142-activity-feed-user-name user-detail-post-user-name" ng-click="showUserProfile(post.user_id)">{{user.first_name}} {{user.last_name}}</p>
+			<p class = "cs142-activity-feed-date user-detail-post-date">1 week ago</p>
+			<div class = "cs142-activity-feed-article"  style="margin-top: 20px !important">
+				<img class = "cs142-activity-article-photo" ng-src = "/images/default_article.jpg"></img>
+				<p class = "cs142-activity-feed-title" style="position: relative; left: -39px;">The situation in the White House is interesting.</p>
+				<p class = "cs142-activity-feed-subtitle">Things are really starting to get crazy in the second month of trumps presidency</p>
+				<p class = "cs142-activity-feed-source" style="width: 64px">NYT.COM</p>
+			</div>
+			<hr class="horizontal-line"/>
+			<div class "actions-section" style="width: 300px">
+				<div class = "action-icon-and-word">
+					<img class = "like-icon" ng-src = "/images/like_icon.png"></img>
+					<p class = "action like"> Like </p>
+				</div>
+				<div class = "action-icon-and-word">
+					<img class = "comment-icon" ng-src = "/images/comment_icon.png"></img>
+					<p class = "action comment"> Comment </p>
+				</div>
+				<div class = "action-icon-and-word">
+					<img class = "share-icon" ng-src = "/images/share_icon.png"></img>
+					<p class = "action share"> Share </p>
+				</div>
+			</div>
+		</div>
+
+
+
+		<script type="text/ng-template" id="fb.reframe.tmpl.html">
+			<md-dialog aria-label="Mango (Fruit)" class="invite-to-read-dialog">
+				<form ng-cloak style="z-index:999">
+					<md-toolbar class="invite-to-read-dialog-toolbar">
+						<div class="md-toolbar-tools">
+							<h2 class="dialog-title">Reframe from Facebook</h2>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="cancel()">
+								<md-icon md-svg-src="images/close_icon.svg" aria-label="Close dialog"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+
+					<md-dialog-content>
+						<div class="md-dialog-content" style="padding-top: 10px;">
+								<div style="margin-bottom: -5px;">Hi {{user.first_name}}, </div>
+								<br/>
+							<div "font-size:15px">Due to your news consumption, Facebook thinks that this article will present an alternative perspective. Please enjoy this article and keep and open mind! </div><br/>
+								<div class = "cs142-activity-feed-article" ng-click="openArticle()" style="width:357px !important; margin-left:140px !important;">
+									<img class = "cs142-activity-article-photo" style="width:357px !important; height: 187px !important;" ng-src = "/images/{{suggestedArticle.article_picture}}"></img>
+									<p class = "cs142-activity-feed-title">{{suggestedArticle.article_title}}</p>
+									<p class = "cs142-activity-feed-subtitle">{{suggestedArticle.article_subtitle}}</p>
+									<p class = "cs142-activity-feed-source">{{suggestedArticle.article_source}}</p>
+								</div>
+
+							<br/>
+							<div style="margin-bottom: -10px;">From,</div> <br/>
+							<div style="margin-bottom: -5px;">Your friends at Facebook</div>
+						</div>
+					</md-dialog-content>
+
+				</form>
+			</md-dialog>
+		</script>
+
+	</body>
 </html>

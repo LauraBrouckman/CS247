@@ -2,7 +2,7 @@
 <html ng-app="cs142App" ng-controller="MainController">
     <head>
 
-        <title>Fakebook</title>
+        <title>{{main.title}}</title>
 
         <link rel="shortcut icon" href="/images/facebook_icon.png" />
 
@@ -35,22 +35,74 @@
 		<link rel="stylesheet" type="text/css" href="components/activity-feed/activity-feed.css" />
 	</head>
 
-    <body layout="column">
+    <body layout="column" >
 
         <md-toolbar layout = "row" class='cs142-toolbar'>
             <div class="main-toolbar-profile-pic-darken" style="opacity:{{main.currentUser.absolute_value_bias_level/10}}" ng-click="showProfile()"></div>
             <img ng-if = "main.userLoggedIn" class = "cs142-user-bar-profile-pic" ng-click="showProfile()" ng-src = "/images/{{main.currentUser.profile_pic_file}}"></img>
-        	<button ng-if = "main.userLoggedIn" class = "cs142-activity-bar-button" ng-click="showProfile()">{{main.currentUser.first_name}}</button>
-        	<button ng-if = "main.userLoggedIn"  class = "cs142-activity-bar-button" ng-click="showFeed()">Home</button>
+        	<button ng-if = "main.userLoggedIn" class = "cs142-activity-bar-button" ng-click="showProfile()" style="right: 200px !important;">{{main.currentUser.first_name}}</button>
+        	<button ng-if = "main.userLoggedIn"  class = "cs142-activity-bar-button" ng-click="showFeed()" style="right: 140px !important;">Home</button>
+            <img ng-if="main.userLoggedIn" src="/images/notification_icon.png" class="main-toolbar-notification-icon" ng-click="showNotification()"></img>
+            <div class="notification-red-one" ng-if="newNotification">1</div>
 		</md-toolbar>
+        <div ng-if="showNotificationDiv" >
+            <div class="notification-header">
+                <div class="notification-header-title">
+                 Notifications
+                </div>
+            </div>
+            <div class="notification-container" ng-click="showNotificationDialog($event)"> 
+                <img src="/images/facebook_logo_large.png" class="notification-facebook-icon"></img>
+                <div class="notification-text">
+                    Facebook has added a new feature called Reframe. Learn more about it!
+                  </div>
+              </div>
+        </div>
+        <div ng-if="showNotificationDiv" class="triangle"></div>
 
-        <div class="container" flex layout="row">
+        <div class="container" flex layout="row" ng-click="hideNotification()">
 
             <md-content flex id="content">
                 <div ng-view></div>
             </md-content>
 
         </div>
+
+
+
+        <script type="text/ng-template" id="info.tmpl.html">
+        <md-dialog aria-label="Mango (Fruit)" class="invite-to-read-dialog">
+        <form ng-cloak style="z-index:999">
+        <md-toolbar class="invite-to-read-dialog-toolbar">
+        <div class="md-toolbar-tools">
+        <h2 class="dialog-title">Info: Reframe</h2>
+        <img src="/images/invite_to_read_icon_white.png" style="height: 25px; padding-left: 10px;"> </img>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-src="/images/close_icon.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+        </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+        <div class="md-dialog-content">
+        <p>
+        <div style="padding-bottom: 20px">
+            The reframe feature has just been added to Facebook to help encourage users to read a more diverse set of news. Your profile and cover photos will now be darkened based on the biases on the news you read: the more you read news from only one source or several similar sources, the more your photos will darken.</div> 
+         <div style="padding-bottom: 20px">   To help lighten your own pictures, you can click on the reframe icon located on your profile page. We at Facebook will suggest an article for you based on topics you have previously read about that provides a new position or opinion.</div> 
+          <div style="padding-bottom: 20px">  To help lighten your friends&#39; pictures, you can ask them to reframe their views (as long as you yourself have a low or modest bias level). When your friends post an article, you will notice the Reframe button.  Click on it to send your friend an anonymous message and article for them to read. 
+          </div>  
+            <div style="padding-bottom: 20px"> Our goal is not to change your mind on an issue; your opinions are your own to form! What we want is for everyone to get a well-rounded version of the news so that they can form well-informed opinions and ideas. 
+            </div>
+            <div style="padding-top: 10px; font-size:12px;"> Misuse of the reframe button can be reported through Facebook. </div>
+
+        </p>       
+        </div>
+        </md-dialog-content>
+
+        </form>
+        </md-dialog>
+        </script>
 
     </body>
 </html>

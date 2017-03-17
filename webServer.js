@@ -248,10 +248,6 @@ app.get('/admin/logout', function(request, response) {
 app.post('/setBiasOfUser/:user_id', function(request, response) {
 	var userId = request.params.user_id;
 	var bias_level = request.body.bias_level;
-	if(!bias_level) {
-		response.status(400).send("No new bias level");
-		return;
-	}
 	User.findOne({_id: userId}, function(err, user) {
 		console.log("found user " + user.first_name);
 		if(err) {

@@ -97,8 +97,15 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 
 	$scope.openArticle = function(post) {
 		var res = $resource('/setBiasOfUser/' + $scope.main.currentUser._id);
+		var oldBiasLevel = $scope.main.currentUser.bias_level;
+		// Neutral article 
+		var newBiasLevel = 0;
+		if(post.article_slant == 0) { //reading a neutral articles helps by 2
+			newBiasLevel = Math.max(Math.abs(oldBiasLevel) - 2, 0) * Math.sign(oldBiasLevel); 
+		} else {
+			newBiasLevel = oldBiasLevel + post.article_slant;
+		}
 		//NOTE HERE THERE SHOULD MAYBE BE BETTER SOME WAY TO CALCULATE THE EFFECT THE ARTICLE READING HAS ON USER'S BIAS
-		var newBiasLevel = $scope.main.currentUser.bias_level + post.article_slant;
 		$scope.highBiasLevel = false;
 		if(Math.abs(newBiasLevel) > 4) {
 			$scope.highBiasLevel = true;
@@ -118,6 +125,22 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 		{
 			invitedPost = post;
 			invitedPost.currentUserName = $scope.main.currentUser.first_name;
+
+			//inviting helps decrease their bias
+			var res = $resource('/setBiasOfUser/' + $scope.main.currentUser._id);
+			var newBiasLevel = 0;
+			var oldBiasLevel = $scope.main.currentUser.bias_level;
+			if (Math.abs($scope.main.currentUser.bias_level) != 0) {
+				newBiasLevel = (Math.abs($scope.main.currentUser.bias_level) - 1) * Math.sign(oldBiasLevel);
+			}
+
+			res.save({bias_level: newBiasLevel}, function () {
+				$rootScope.$broadcast('currentUserChanged');
+			}, function errorHandling(err) {
+				console.log("Could not change the bias level");
+			});
+
+
 		    $mdDialog.show({
 		      controller: DialogController,
 		      templateUrl: 'dialog1.tmpl.html',
@@ -154,6 +177,8 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 	      clickOutsideToClose:false,
 	      fullscreen: false,
 	      multiple: true,
+	      hasBackdrop: false,
+	      escapeToClose: false,
 	      openFrom: {
 	          top: 2000,
 	          width: 125,
@@ -161,10 +186,10 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 	          left: 2000 
 	      },
         closeTo: {
-          	  top: 2000,
+          	  top: -2000,
 	          width: 125,
 	          height: 50,
-	          left: 2000 
+	          left: -2000 
         } // Only for -xs, -sm breakpoints.
 	    });
   	};
@@ -178,12 +203,27 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
   	$scope.showChat = function(ev) {
   		$scope.showMessageTab = false;
   		$mdDialog.show({
-	      controller: ChatDialogController,
+      controller: ChatDialogController,
 	      templateUrl: 'chat.tmpl.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
 	      clickOutsideToClose:false,
-	      fullscreen: false // Only for -xs, -sm breakpoints.
+	      fullscreen: false,
+	      multiple: true,
+	      hasBackdrop: false,
+	      escapeToClose: false,
+	      openFrom: {
+	          top: 2000,
+	          width: 125,
+	          height: 50,
+	          left: 2000 
+	      },
+        closeTo: {
+          	  top: -2000,
+	          width: 125,
+	          height: 50,
+	          left: -2000 
+        }// Only for -xs, -sm breakpoints.
 	    });
   	}
 
@@ -199,8 +239,8 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
   		}
   		$scope.newChatMessage = "";
 	  	$scope.hide = function() {
+	  	   showMessageTab()
 	      $mdDialog.hide();
-	    	showMessageTab()
 	    };
 
 	    $scope.cancel = function() {
@@ -220,8 +260,6 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 	    		}
 	    		newChatMessages.push({text: $scope.newChatMessage, id: Math.random()});
 	    		$scope.messagesSent.push(m);
-	    		console.log(newChatMessages);
-	    		console.log($scope.messagesSent);
 	    		$scope.newChatMessage = "";
 	    	}
 	    }
@@ -237,9 +275,11 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
 		type: "neutral",
 		from: "Anonymous"
 	}
+	$scope.noUrl = false;
+	$scope.urlBorderColor = "rgb(179, 179, 179)";
 
 	var messageDictionary = {
-		neutral: "I saw that you posted the article '" + invitedPost.article_title + "' which seems in line with your news reading bias.",
+		neutral: "I saw that you posted the article '" + invitedPost.article_title + "' which seems in line with your news reading behavior.",
 		aggressive: "I saw your post about the article '" + invitedPost.article_title + "' and I don't agree with you. Please read this to get a new perspective on the issue.",
 		nice: "After reading the article you posted, '" + invitedPost.article_title + "' I realize that we have a difference of opinion. I don't expect you to change your mind, but I think it is important to read different opinions."
 	}
@@ -255,12 +295,19 @@ cs142App.controller('ActivityFeedController', ['$scope', '$route', '$location', 
     $scope.sendInvitation = function(ev) {
     	if($scope.articleUrl == "") {
     		console.log("error there is no url posted");
+    		$scope.urlBorderColor = "red";
+    		$scope.noUrl = true;
     	}
+    	else {
+    		$scope.urlBorderColor = "rgb(179, 179, 179)";
+    		$scope.noUrl = false;
     		var messageToSend = "Hi " + $scope.invitedPost.poster.split(" ")[0] + ",\n";
     		messageToSend += messageDictionary[$scope.message.type];
-    		messageToSend += "I would like to invite you to read " + $scope.articleUrl;
+    		messageToSend += " I would like to invite you to read " + $scope.articleUrl;
     		sendMessage(ev, messageToSend, $scope.invitedPost.poster);
     	  $mdDialog.hide();
+    	}
+
     };
   }
 		

@@ -46,7 +46,7 @@
    var pt = {id: 3, first_name: "Peregrin", last_name: "Took", 
              bias_level: 5, profile_pic_file: "took1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var rk = {id: 4, first_name: "Rey", last_name: "Kenobi", 
-             bias_level: 6, profile_pic_file: "kenobi1.jpg", cover_pic_file: "default_cover_pic.jpg"};
+             bias_level: 6, profile_pic_file: "kenobi2.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var al = {id: 5, first_name: "April", last_name: "Ludgate", 
              bias_level: 2, profile_pic_file: "ludgate1.jpg", cover_pic_file: "default_cover_pic.jpg"};
    var jo = {id: 6, first_name: "John", last_name: "Ousterhout",
